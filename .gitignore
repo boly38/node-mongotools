@@ -1,0 +1,9 @@
+#Npm
+node_modules/
+package-lock.json
+
+#IntelliJ
+*.iml
+
+#Project backups
+backup/

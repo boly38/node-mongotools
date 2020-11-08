@@ -1,0 +1,40 @@
+{
+  "name": "node-mongotools",
+  "version": "0.0.0",
+  "description": "node-mongotools: a mongotools wrapper for nodejs. Freely inspired from github.com/amulyakashyap09/mbr",
+  "main": "./mongoTools.js",
+  "author": "Boly38 <boly380@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/boly38/node-mongotools.git"
+  },
+  "bugs": {
+    "url": "https://github.com/boly38/node-mongotools/issues"
+  },
+  "keywords": [
+    "mongo",
+    "mongodb",
+    "node",
+    "wrapper",
+    "mongotools",
+    "mongodump",
+    "mongorestore",
+    "database",
+    "collection"
+  ],
+  "copyright": {
+    "title": "node-mongotools",
+    "years": [
+      2020
+    ],
+    "author": "Brice Vandeputte"
+  },
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "mkdirp": "^1.0.4"
+  },
+  "jshintConfig": {
+    "esversion": 6
+  }
+}
