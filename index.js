@@ -24,13 +24,13 @@ if (action == 'dump') {
         userName:'root', password:'mypass', authenticationDatabase:'admin',
         db: "myDatabase"
   })
-  .catch( (err) => {
-    console.error(err.message);
-  })
   .then( (success) => {
     console.info(success.message);
     if (success.stdout) { console.info('stdout:', success.stdout); }
     if (success.stderr) { console.error('stderr:', success.stderr); }
+  })
+  .catch( (err) => {
+    console.error(err.message);
   });
 }
 
@@ -44,15 +44,15 @@ else if ((action == 'restore') && (process.argv.slice(2).length > 1)) {
         dropBeforeRestore: true,
         deleteDumpAfterRestore: true
   })
-  .catch( (err) => {
-    console.error(err.message);
-  })
   .then( (success) => {
     if (success) {
       console.info(success.message);
       if (success.stdout) { console.info('stdout:', success.stdout); }
       if (success.stderr) { console.error('stderr:', success.stderr); }
     }
+  })
+  .catch( (err) => {
+    console.error(err.message);
   });
 } else {
   printUsage();

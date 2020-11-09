@@ -4,13 +4,13 @@ var mkdirp = require('mkdirp');
 var ssync = require('child_process').spawnSync;
 
 exports.mongodump = (options) => new Promise(async function(resolve, reject) {
-    if (!('db' in options)) {
-      return reject({ error: 'INVALID_OPTIONS', message: 'db: Database name for dump is required.' });
+    if (!('db' in options) && !('uri' in options)) {
+      return reject({ error: 'INVALID_OPTIONS', message: 'db: database name for dump is required.' });
     }
     var dumpCmd = ('dumpCmd' in options) ? options.dumpCmd : 'mongodump';
     // Improvement: verify dumpCmd exists
 
-    var dumpPath = ('path' in options) ? options.path : __dirname + '/backup';
+    var dumpPath = ('path' in options) ? options.path : 'backup';
     // create dumpPath if not exist
     if (!fs.existsSync(dumpPath)) {
       await fs.promises.mkdir(dumpPath, { recursive: true })
@@ -19,20 +19,33 @@ exports.mongodump = (options) => new Promise(async function(resolve, reject) {
         });
     }
 
-    var host = ('host' in options) ? options.host : '127.0.0.1';
-    var port = ('port' in options) ? options.port : 27017;
-    var command = dumpCmd + ' --host ' + host + ' --port ' + port;
-    if ('userName' in options && 'password' in options) {
-      command += ' --username ' + options.userName +
-                 ' --password ' + options.password;
-      if ('authenticationDatabase' in options) {
-        command += ' --authenticationDatabase ' + options.authenticationDatabase;
+    var database = 'backup';
+    var command = dumpCmd;
+    var uri  = ('uri' in options) ? options.uri : null;
+
+    if (uri != null) {
+      if (!uri.includes('/')) {
+        return reject({ error: 'INVALID_OPTIONS', message: 'uri: database name for dump is required.' });
+      }
+      database = uri.substring(uri.lastIndexOf('/') + 1, uri.length)
+      command += ' --uri ' + uri
+    } else {
+      command += ' --host ' + (('host' in options) ? options.host : '127.0.0.1') +
+                 ' --port ' + (('port' in options) ? options.port : 27017);
+      if ('userName' in options && 'password' in options) {
+        command += ' --username ' + options.userName +
+                   ' --password ' + options.password;
+        if ('authenticationDatabase' in options) {
+          command += ' --authenticationDatabase ' + options.authenticationDatabase;
+        }
+      }
+      if ('db' in options && options.db != '*') {
+        command += ' --db ' + options.db;
+        database = options.db;
       }
     }
-    var database = 'backup';
-    if ('db' in options && options.db != '*') {
-      command += ' --db ' + options.db;
-      database = options.db;
+    if ('ssl' in options && options.ssl) {
+       command += ' --ssl';
     }
     var dateTimeSuffix = new Date().toLocaleString().replace(/ /g, '_').replace(/:/g, '');
     var simplifiedName = database.replace(/[^a-zA-Z0-9\\-]/g,'_');
@@ -42,11 +55,15 @@ exports.mongodump = (options) => new Promise(async function(resolve, reject) {
 
     // launch mongodump
     try {
+      //
+      console.log(command);
       var dump = ssync(dumpCmd, command.split(' ').slice(1));
       if (dump.status === 0) {
-        resolve({message: 'db:' + database + ' - dump created:' + fileName, status: dump.status, stdout: dump.stdout.toString(), stderr: dump.stderr.toString()});
+        resolve({message: 'db:' + database + ' - dump created:' + fileName, status: dump.status,
+          stdout: dump.stdout.toString(), stderr: dump.stderr.toString()});
       } else {
-        reject({ error: 'COMMAND_ERROR', message: dump.error , status: dump.status, stdout: dump.stdout.toString(), stderr: dump.stderr.toString()});
+        reject({ error: 'COMMAND_ERROR', message: dump.error , status: dump.status, stdout: dump.stdout.toString(),
+          stderr: dump.stderr.toString()});
       }
     } catch (exception) {
       reject({ error: 'COMMAND_EXCEPTION', message: exception});
@@ -62,15 +79,22 @@ exports.mongorestore = (options) => new Promise((resolve, reject) => {
     var restoreCmd = ('restoreCmd' in options) ? options.restoreCmd : 'mongorestore';
     // Improvement: verify restoreCmd exists
 
-    var host = ('host' in options) ? options.host : '127.0.0.1';
-    var port = ('port' in options) ? options.port : 27017;
-    var command = restoreCmd + ' --host ' + host + ' --port ' + port;
-    if ('userName' in options && 'password' in options) {
-      command += ' --username ' + options.userName +
-                 ' --password ' + options.password;
-      if ('authenticationDatabase' in options) {
-        command += ' --authenticationDatabase ' + options.authenticationDatabase;
+    var uri  = ('uri' in options) ? options.uri : null;
+    if (uri != null) {
+      command += ' --uri ' + uri
+    } else {
+      var command = restoreCmd + ' --host ' + (('host' in options) ? options.host : '127.0.0.1') +
+                                 ' --port ' + (('port' in options) ? options.port : 27017);
+      if ('userName' in options && 'password' in options) {
+        command += ' --username ' + options.userName +
+                   ' --password ' + options.password;
+        if ('authenticationDatabase' in options) {
+          command += ' --authenticationDatabase ' + options.authenticationDatabase;
+        }
       }
+    }
+    if ('ssl' in options && options.ssl) {
+       command += ' --ssl';
     }
     if ('dropBeforeRestore' in options && options.dropBeforeRestore == true) {
       command += ' --drop';

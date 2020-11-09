@@ -11,14 +11,44 @@ node index dump
 node index restore backup/myDatabase__2020-11-8_150102.gz
 ```
 
-## install as library related examples
+## use as library
+
+### install dependency
 
 You have to import as dependency
 ```
 npm install node-mongotools
 ```
 
-### mongodump example
+### mongodump
+
+**mongodump related options**
+
+| option     | required | default value | description                                        |
+|------------|----------|---------------|----------------------------------------------------|
+| `dumpPath` | false    | `backup`      | dump target directory, created if it doesn't exist |
+| `dumpCmd ` | false    | `mongodump`   | mongodump binary                                   |
+| `fileName` | false    | `<dbName_date_time.gz>`  | dump target filename                    |
+| `ssl`     | false    | false         | add `--ssl` option                                 |
+
+Then either `uri` or `host`/`port`/`db`:
+
+| option   | required | default value | description                                        |
+|----------|----------|---------------|----------------------------------------------------|
+| `uri`    | true     | (none)        | mongodump uri, example `mongodb+srv://granted-user:MySecretHere@cluster0.xzryx.mongodb.net/tMyDatababse`   |
+
+or
+
+| option    | required | default value | description                                        |
+|-----------|----------|---------------|----------------------------------------------------|
+| `db`      | true     | (none)        | mongo database name, set it to '*' to dump all     |
+| `host`    | false    | `127.0.0.1`   | mongo database hostname                            |
+| `port`    | false    | `27017`       | mongo database port                                |
+| `userName`| false    | (none)        | mongo database username                            |
+| `password`| false    | (none)        | mongo database password                            |
+| `authenticationDatabase`| false      | (none)  | mongo auth database                      |
+
+Example:
 ```
 var mongoTools = require("node-mongotools");
 
@@ -30,7 +60,38 @@ mongoTools.mongodump({
 .then((success) => console.info("success", success) )
 .catch((err) => console.error("error", err) );
 ```
-### mongorestore example
+
+
+### mongorestore
+
+**mongorestore related options**
+
+| option     | required | default value | description                                        |
+|------------|----------|---------------|----------------------------------------------------|
+| `dumpPath` | true     | (none)        | dump file to restore                               |
+| `restoreCmd` | false     | `mongorestore`        | mongorestore binary                 |
+| `ssl`     | false    | false         | add `--ssl` option                                 |
+| `dropBeforeRestore` | false    | false | set it to `true` to append `--drop` option                     |
+| `deleteDumpAfterRestore` | false    | false   |  set it to `true` to remove restored backup file    |
+
+Then either `uri` or `host`/`port`/`db`:
+
+| option   | required | default value | description                                        |
+|----------|----------|---------------|----------------------------------------------------|
+| `uri`    | true     | (none)        | mongodump uri, example `mongodb+srv://granted-user:MySecretHere@cluster0.xzryx.mongodb.net`   |
+
+or
+
+| option    | required | default value | description                                        |
+|-----------|----------|---------------|----------------------------------------------------|
+| `host`    | true     | `127.0.0.1`   | mongo database hostname                            |
+| `port`    | true     | `27017`       | mongo database port                                |
+| `userName`| false    | (none)        | mongo database username                            |
+| `password`| false    | (none)        | mongo database password                            |
+| `authenticationDatabase`| false      | (none)  | mongo auth database                      |
+
+
+Example:
 ```
 var mongoTools = require("node-mongotools");
 
@@ -46,23 +107,3 @@ mongoTools.mongorestore({
 })
 .catch((err) => console.error("error", err) );
 ```
-
-## User documentation
-### common options
-- `host`: mongo database hostname (default: `127.0.0.1`)
-- `port`: mongo database port (default: `27017`)
-- `userName`: mongo database username (default: none)
-- `password`: mongo database password (default: none)
-- `authenticationDatabase`: mongo auth database (default: none)
-
-### mongodump options
-- `dumpCmd`: mongodump binary (default: mongodump)
-- `dumpPath`: dump target directory, created if it doesn't exist (default: library path !)
-- `fileName`: dump target filename (default: generated `<dbName_date_time.gz>`)
-- `db`: mongo database name, set it to '*' for all databases (default: none, required)
-
-### mongorestore options
-- `restoreCmd`: mongorestore binary (default: mongorestore)
-- `dumpPath`: dump file to restore (default: none, required)
-- `dropBeforeRestore`: set it to `true` to append `--drop` option (default: disabled)
-- `deleteDumpAfterRestore`: set it to `true` to remove restored backup file (default: disabled)
