@@ -2,8 +2,16 @@
 node_modules/
 package-lock.json
 
+.nyc_output/
+coverage/
+
 #IntelliJ
 *.iml
 
-#Project backups
+#Project defaukt backup directory
+dropbox/
 backup/
+tests/backup/
+
+#Files with secrets
+*.dontpush.*
