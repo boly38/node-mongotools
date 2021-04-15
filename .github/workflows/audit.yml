@@ -1,0 +1,45 @@
+name: mongotools-audit
+
+on:
+  schedule:
+    - cron: '0 10 * * *'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  scan:
+    name: npm audit
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        # node-version: [10.x, 12.x, 14.x, 15.x]
+        node-version: [12.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        # - run: npm ci # need package.json.lock
+        run: npm install
+
+      - name: Npm audit
+        uses: oke-py/npm-audit-action@v1.7.1
+        with:
+          audit_level: moderate
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dedupe_issues: true

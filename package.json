@@ -2,7 +2,7 @@
   "name": "node-mongotools",
   "version": "0.0.1",
   "description": "node-mongotools: a mongotools wrapper for nodejs. Freely inspired from github.com/amulyakashyap09/mbr",
-  "main": "./mongoTools.js",
+  "main": "./mt.js",
   "author": "Boly38 <boly380@gmail.com>",
   "license": "MIT",
   "repository": {
@@ -26,15 +26,25 @@
   "copyright": {
     "title": "node-mongotools",
     "years": [
-      2020
+      2020,
+      2021
     ],
     "author": "Brice Vandeputte"
   },
   "dependencies": {
+    "chai": "^4.3.4",
     "child_process": "^1.0.2",
-    "mkdirp": "^1.0.4"
+    "dateformat": "^4.5.1",
+    "dropbox-v2-api": "^2.4.38",
+    "mkdirp": "^1.0.4",
+    "mocha": "^8.3.2",
+    "nyc": "^15.1.0"
   },
   "jshintConfig": {
     "esversion": 6
+  },
+  "scripts": {
+    "test": "echo test&& mocha --exit --unhandled-rejections=strict tests/*.test.js --timeout 50000",
+    "ci-test": "echo ci-test&& nyc --reporter text --reporter cobertura --reporter html --reporter=lcov --lines 66 mocha --exit --unhandled-rejections=strict tests/*.test.js --timeout 50000"
   }
 }
