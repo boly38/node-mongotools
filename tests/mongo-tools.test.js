@@ -6,8 +6,11 @@ const chai = require('chai');
 const assert = require('assert').strict;
 const expect = chai.expect
 chai.should();
+chai.use(require('chai-string'));
 
+const testDbName = 'myDbForTest';
 const testBackupDirectory = 'tests/backup';
+const testPort = process.env.MT_MONGO_PORT || 27017;
 var mt = null;
 var mtOptions = null;
 var lastDumpFile = null;
@@ -28,8 +31,8 @@ describe("Mongo Tools", function() {
       fs.rmdirSync(testBackupDirectory, { recursive: true });
       mt = new MongoTools();
       mtOptions = new MTOptions({
-        db: 'myDbForTest',
-        port: process.env.MT_MONGO_PORT || 27017,
+        db: testDbName,
+        port: testPort,
         path: testBackupDirectory,
         dropboxToken: null,
         showCommand: true
@@ -43,6 +46,20 @@ describe("Mongo Tools", function() {
       logSuccess(dumpResult);
       dumpResult.fileName.should.not.be.eql(null);
       dumpResult.fullFileName.should.not.be.eql(null);
+      lastDumpFile = dumpResult.fullFileName;
+    });
+
+    it("should dump database from uri", async function() {
+      const dumpResult = await mt.mongodump(new MTOptions({
+                                                    uri: `mongodb://${process.env.MT_MONGO_USER}:${process.env.MT_MONGO_PWD}@127.0.0.1:${testPort}/${testDbName}?authSource=admin`,
+                                                    path: testBackupDirectory,
+                                                    dropboxToken: null,
+                                                    showCommand: true
+                                                  })).catch(_expectNoError);
+      logSuccess(dumpResult);
+      dumpResult.fileName.should.not.be.eql(null);
+      dumpResult.fullFileName.should.not.be.eql(null);
+      dumpResult.fullFileName.should.startWith('tests/backup/myDbForTest__2');
       lastDumpFile = dumpResult.fullFileName;
     });
 
