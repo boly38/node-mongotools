@@ -1,4 +1,6 @@
-# node-mongotools node wrapper
+# node-mongotools
+[![NPM](https://nodei.co/npm/node-mongotools.png?compact=true)](https://npmjs.org/package/node-mongotools)
+
 This project provide 2 wrappers :
 - mongodump,
 - mongorestore.
