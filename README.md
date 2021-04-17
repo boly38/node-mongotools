@@ -200,5 +200,5 @@ npm run test
 | badge  | name   | description  |
 |--------|-------|:--------|
 | ![CI/CD](https://github.com/boly38/node-mongotools/workflows/mongotools-ci/badge.svg) |Github actions|Continuous tests.
-| [![Audit](https://github.com/boly38/node-mongotools/actions/workflows/mongotools-audit.yml/badge.svg)](https://github.com/boly38/node-mongotools/actions/workflows/mongotools-audit.yml) |Github actions|Continuous vulnerability audit.
+| [![Audit](https://github.com/boly38/node-mongotools/actions/workflows/audit.yml/badge.svg)](https://github.com/boly38/node-mongotools/actions/workflows/audit.yml) |Github actions|Continuous vulnerability audit.
 |  |[Houndci](https://houndci.com/)|JavaScript  automated review (configured by `.hound.yml`)|
