@@ -47,6 +47,7 @@ node mt dump
 node mt restore /backup/myDatabase__2020-11-08_150102.gz
 
 # git bash for windows users having absolute path issue could use the following command
+unalias node
 MSYS_NO_PATHCONV=1 node mt restore /backup/myDatabase__2020-11-08_150102.gz
 ```
 
@@ -61,7 +62,8 @@ npm install node-mongotools
 
 ### Define the requirements, example:
 ``` 
-const mongoTools = require('node-mongotools');
+const { MongoTools, MTOptions } = require("node-mongotools")
+var mongoTools = new MongoTools();
 const mtOptions = new MTOptions({
         db: 'myDb',
         port: 17017,
@@ -132,7 +134,8 @@ or
 
 Simple example:
 ```
-var mongoTools = require("node-mongotools");
+const { MongoTools, MTOptions } = require("node-mongotools")
+var mongoTools = new MongoTools();
 
 mongoTools.mongodump({ 
    db:'myDatabase',
@@ -155,7 +158,8 @@ mongoTools.mongodump({
 
 Simple example:
 ```
-var mongoTools = require("node-mongotools");
+const { MongoTools, MTOptions } = require("node-mongotools")
+var mongoTools = new MongoTools();
 
 mongoTools.mongorestore({ 
    dumpFile:'backup/myDatabase__2020-11-8_160011.gz',
