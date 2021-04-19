@@ -2,12 +2,15 @@
 [![NPM](https://nodei.co/npm/node-mongotools.png?compact=true)](https://npmjs.org/package/node-mongotools)
 
 This project provide 2 wrappers :
-- mongodump,
-- mongorestore.
+- **mongodump**,
+- **mongorestore**.
 
-This project also include dropbox integration feature to 
+This project also include **dropbox** integration feature to 
 - dump and upload onto dropbox,
 - restore from a dropbox hosted mongo backup.
+
+There is an autonomous feature called **rotation** that provide a backup file rotation mechanism
+- remove N oldest deprecated backups.
 
 ## Command line usage
 
@@ -35,11 +38,14 @@ cp env/initEnv.template.sh env/initEnv.dontpush.sh
 node mt dump
 # restore a mongo local dump
 node mt restore backup/myDatabase__2020-11-08_150102.gz
+# rotate backup files
+node mt rotation
 ```
 
 ### Dropbox feature
 
 You have a dropbox access token in your preferences, (cf. "Mongo tools options")
+
 ```
 # create a mongo dump is the same command
 node mt dump
@@ -49,6 +55,9 @@ node mt restore /backup/myDatabase__2020-11-08_150102.gz
 # git bash for windows users having absolute path issue could use the following command
 unalias node
 MSYS_NO_PATHCONV=1 node mt restore /backup/myDatabase__2020-11-08_150102.gz
+
+# rotate local and dropbox backup files
+node mt rotation
 ```
 
 ## Library use
@@ -64,12 +73,12 @@ npm install node-mongotools
 ``` 
 const { MongoTools, MTOptions } = require("node-mongotools")
 var mongoTools = new MongoTools();
-const mtOptions = new MTOptions({
+const mtOptions = {
         db: 'myDb',
         port: 17017,
         path: '/opt/myapp/backups',
         dropboxToken: process.env.MYAPP_DROPBOX_SECRET_TOKEN
-      })
+      };
 ```
 
 ### List dumps
@@ -85,6 +94,11 @@ var promiseResult = mongoTools.mongodump(mtOptions);
 ### Restore
 ```
 var promiseResult = mongoTools.mongorestore(mtOptions);
+```
+
+### Rotation
+```
+var promiseResult = mongoTools.rotation(mtOptions);
 ```
 
 ## Mongo tools options
@@ -103,7 +117,7 @@ console.log(new MTOptions());
 ```
 
 ### shared options
-This options are used by dump and restore.
+These options are used by dump and restore.
 
 Either `uri` or `host`/`port`/`db`:
 
@@ -189,6 +203,34 @@ When a token is set,
   and retrieve it into `dropboxLocalPath` before doing the mongorestore action.
 
 
+### Rotation options
+A safe time windows is defined by :
+ * `now - rotationWindowsDays day(s)` ===> `now`  
+where backups can't be removed.
+
+Backup out of safe time windows are called `deprecated backup`.
+
+- `rotationMinCount`: minimum deprecated backups to keep,
+- `rotationCleanCount`: number of (oldest) deprecated backups to delete.
+
+| option               |  env                     |  required | default value   | description                                       |
+|----------------------|--------------------------|-----------|-----------------|---------------------------------------------------|
+| `rotationDryMode`    | MT_ROTATION_DRY_MODE     | false     | false           | dont do delete actions, just print it             |
+| `rotationWindowsDays`| MT_ROTATION_WINDOWS_DAYS | true      | 15              | safe time windows in days since now               |
+| `rotationMinCount`   | MT_ROTATION_MIN_COUNT    | true      | 2               | minimum deprecated backups to keep.               |
+| `rotationCleanCount` | MT_ROTATION_CLEAN_COUNT  | true      | 10              | number of (oldest first) deprecated backups to delete. |
+
+Simple example:
+```
+MT_ROTATION_CLEAN_COUNT=2 \
+MT_ROTATION_DRY_MODE=true \
+MT_ROTATION_WINDOWS_DAYS=3 \ node mt rotation
+```
+Example details: if there is a backup that is more than 3 days old, keep 2 newer ones and delete the 10 oldest.
+
+Dropbox limits:
+- rotation feature will not apply if dropbox backup target directory content contains more than 2000 files.
+
 ## How to contribute
 You're not a dev ? just submit an issue (bug, improvements, questions). Or else:
 * Clone
@@ -207,4 +249,4 @@ npm run test
 |--------|-------|:--------|
 | ![CI/CD](https://github.com/boly38/node-mongotools/workflows/mongotools-ci/badge.svg) |Github actions|Continuous tests.
 | [![Audit](https://github.com/boly38/node-mongotools/actions/workflows/audit.yml/badge.svg)](https://github.com/boly38/node-mongotools/actions/workflows/audit.yml) |Github actions|Continuous vulnerability audit.
-|  |[Houndci](https://houndci.com/)|JavaScript  automated review (configured by `.hound.yml`)|
+| [![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)|[Houndci](https://houndci.com/)|JavaScript  automated review (configured by `.hound.yml`)|
