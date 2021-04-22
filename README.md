@@ -39,6 +39,7 @@ cp env/initEnv.template.sh env/initEnv.dontpush.sh
 # create a mongo dump
 node mt dump
 # restore a mongo local dump
+# please note that mt restore use following options : dropBeforeRestore: true, deleteDumpAfterRestore: true
 node mt restore backup/myDatabase__2020-11-08_150102.gz
 # rotate backup files
 node mt rotation

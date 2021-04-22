@@ -5,7 +5,7 @@ async function dumpAndRotate(uri, path){
   var mtc = new MTCommand();// to reuse log methods
   // mongodump
   const dumpResult = await mt.mongodump({ uri, path })
-    .catch(mtc.logError);
+    .catch(mtc.logError.bind(mtc));
   if (dumpResult === undefined) {// error case
     process.exit(1);
   }
