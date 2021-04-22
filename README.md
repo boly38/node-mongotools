@@ -12,6 +12,8 @@ This project also include **dropbox** integration feature to
 There is an autonomous feature called **rotation** that provide a backup file rotation mechanism
 - remove N oldest deprecated backups.
 
+This readme contains some samples. Other samples are under [examples/](./examples). 
+
 ## Command line usage
 
 ### Initial setup - first time only
