@@ -1,3 +1,4 @@
+const os = require('os');
 const { MongoTools, MTCommand } = require("node-mongotools")
 
 async function dumpAndRotate(uri, path){
@@ -21,6 +22,6 @@ async function dumpAndRotate(uri, path){
 }
 
 const uri = process.env.MY_MONGO_URI
-const path = `backup/${process.env.HOSTNAME}`;
+const path = `backup/${os.hostname()}`;
 
 dumpAndRotate(uri, path);
