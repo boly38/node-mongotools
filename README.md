@@ -38,9 +38,17 @@ cp env/initEnv.template.sh env/initEnv.dontpush.sh
 ```
 # create a mongo dump
 node mt dump
+
+# create a encrypted mongo dump
+node mt dumpz
+
+# list backups
+node mt list
+
 # restore a mongo local dump
 # please note that mt restore use following options : dropBeforeRestore: true, deleteDumpAfterRestore: true
 node mt restore backup/myDatabase__2020-11-08_150102.gz
+
 # rotate backup files
 node mt rotation
 ```
@@ -147,6 +155,9 @@ or
 | `dumpCmd ` |               | false    | `mongodump`   | mongodump binary                                   |
 | `fileName` |               | false    | `<dbName_date_time.gz>`  | dump target filename                    |
 | `ssl`      |               | false    | false         | add `--ssl` option                                 |
+| `encrypt`  |               | false    | false         | encrypt the dump using secret                      |
+| `secret`   | MT_SECRET     | false    | null          | secret to use if encrypt is enabled                |
+| `encryptSuffix`   |        | false    | `.enc`        | encrypt file suffix                                |
 
 
 Simple example:
@@ -172,6 +183,8 @@ mongoTools.mongodump({
 | `ssl`        |               | false     | false           | add `--ssl` option                                 |
 | `dropBeforeRestore` |        | false     | false           | set it to `true` to append `--drop` option         |
 | `deleteDumpAfterRestore` |   | false     | false           |  set it to `true` to remove restored backup file   |
+| `decrypt`    |               | false     | false           | decrypt the dump using secret. Activated if suffix is detected |
+| `secret`     | MT_SECRET     | false     | null            | secret to use if decrypt is enabled                |
 
 Simple example:
 ```
