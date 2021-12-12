@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "description": "node-mongotools: a mongotools wrapper for nodejs. Freely inspired from github.com/amulyakashyap09/mbr",
   "main": "./lib/mt.js",
-  "author": "Boly38 <boly380@gmail.com>",
+  "author": "Boly38 <boly38@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",

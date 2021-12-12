@@ -33,7 +33,7 @@ describe("Mongo Tools", function() {
 
     before(async function () {
       console.info("Mongo Tools :: before");
-      fs.rmdirSync(testBackupDirectory, { recursive: true });
+      fs.rmSync(testBackupDirectory, { recursive: true, force: true });
       nbBackupExpected = 0;
       mt = new MongoTools();
       mtOptions = new MTOptions({
