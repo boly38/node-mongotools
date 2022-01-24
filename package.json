@@ -3,6 +3,11 @@
   "version": "1.2.1",
   "description": "node-mongotools: a mongotools wrapper for nodejs. Freely inspired from github.com/amulyakashyap09/mbr",
   "main": "./lib/mt.js",
+  "scripts": {
+    "preinstall": "npx force-resolutions",
+    "test": "echo test&& mocha --exit --unhandled-rejections=strict tests/*.test.js --timeout 50000",
+    "ci-test": "echo ci-test&& nyc --reporter text --reporter cobertura --reporter html --reporter=lcov --lines 66 mocha --exit --unhandled-rejections=strict tests/*.test.js --timeout 50000"
+  },
   "author": "Boly38 <boly38@gmail.com>",
   "license": "MIT",
   "repository": {
@@ -39,14 +44,14 @@
   "devDependencies": {
     "chai": "^4.3.4",
     "chai-string": "^1.5.0",
-    "mocha": "^9.1.2",
+    "mocha": "^9.1.3",
+    "nanoid": "^3.2.0",
     "nyc": "^15.1.0"
+  },
+  "resolutions": {
+    "nanoid": "^3.2.0"
   },
   "jshintConfig": {
     "esversion": 6
-  },
-  "scripts": {
-    "test": "echo test&& mocha --exit --unhandled-rejections=strict tests/*.test.js --timeout 50000",
-    "ci-test": "echo ci-test&& nyc --reporter text --reporter cobertura --reporter html --reporter=lcov --lines 66 mocha --exit --unhandled-rejections=strict tests/*.test.js --timeout 50000"
   }
 }
