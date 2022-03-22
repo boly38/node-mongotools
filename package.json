@@ -32,7 +32,8 @@
     "title": "node-mongotools",
     "years": [
       2020,
-      2021
+      2021,
+      2022
     ],
     "author": "Brice Vandeputte"
   },
@@ -46,10 +47,12 @@
     "chai-string": "^1.5.0",
     "mocha": "^9.1.3",
     "nanoid": "^3.2.0",
+    "npm-force-resolutions": "^0.0.10",
     "nyc": "^15.1.0"
   },
   "resolutions": {
-    "nanoid": "^3.2.0"
+    "nanoid": "^3.2.0",
+    "minimist": "^1.2.6"
   },
   "jshintConfig": {
     "esversion": 6
