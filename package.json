@@ -38,7 +38,6 @@
     "author": "Brice Vandeputte"
   },
   "dependencies": {
-    "crypto": "^1.0.1",
     "dateformat": "^4.5.1",
     "dropbox-v2-api": "^2.4.38"
   },
