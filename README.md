@@ -160,6 +160,7 @@ or
 | `encryptSuffix`   |        | false    | `.enc`        | encrypt file suffix                                |
 | `includeCollections`   |        | false    | (none)        | Collections to include, if not specified all collections are included |
 | `excludeCollections`   |        | false    | (none)        | Collections to exclude, if not specified all collections are included |
+
 Simple example:
 ```
 const { MongoTools, MTOptions } = require("node-mongotools")
