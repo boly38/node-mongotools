@@ -8,9 +8,17 @@ const expect = chai.expect
 chai.should();
 chai.use(require('chai-string'));
 
-const testDbName = 'myDbForTest';
-const testBackupDirectory = 'tests/backup';
+const testDbUsername = process.env.MT_MONGO_USER || null;
+const testDbPassword = process.env.MT_MONGO_PWD || null;
+const testDbAuth = testDbUsername !== null && testDbPassword != null ? `${testDbUsername}:${testDbPassword}@` : '';
+const testDbAuthSuffix = testDbUsername !== null && testDbPassword != null ? '?authSource=admin' : '';
 const testPort = process.env.MT_MONGO_PORT || 27017;
+const testDbToken = process.env.MT_DROPBOX_TOKEN || null;
+
+const testBackupDirectory = 'tests/backup';
+const testDbName = 'myDbForTest';
+const testDbUri = `mongodb://${testDbAuth}127.0.0.1:${testPort}/${testDbName}${testDbAuthSuffix}`;
+
 var mt = null;
 var mtOptions = null;
 var lastDumpFile = null;
@@ -57,9 +65,26 @@ describe("Mongo Tools", function() {
       nbBackupExpected++;
     });
 
+    if (testDbToken !== null) {
+        it("should dump database on dropbox", async function() {
+          const dumpResult = await mt.mongodump(new MTOptions({
+                                                        db: testDbName,
+                                                        port: testPort,
+                                                        path: testBackupDirectory,
+                                                        fileName: 'should_dump_db_dropbox.gz',
+                                                        showCommand: true
+                                                      })).catch(_expectNoError);
+          logSuccess(dumpResult);
+          dumpResult.fileName.should.not.be.eql(null);
+          dumpResult.fullFileName.should.not.be.eql(null);
+          lastDumpFile = dumpResult.fullFileName;
+          nbBackupExpected++;
+        });
+    }
+
     it("should dump database from uri", async function() {
       const dumpResult = await mt.mongodump(new MTOptions({
-                                                    uri: `mongodb://${process.env.MT_MONGO_USER}:${process.env.MT_MONGO_PWD}@127.0.0.1:${testPort}/${testDbName}?authSource=admin`,
+                                                    uri: testDbUri,
                                                     path: testBackupDirectory,
                                                     dropboxToken: null,
                                                     showCommand: true
