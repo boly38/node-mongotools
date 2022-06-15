@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "dateformat": "^4.5.1",
-    "dropbox-v2-api": "^2.4.38"
+    "dropbox-v2-api": "^2.5.3"
   },
   "devDependencies": {
     "chai": "^4.3.4",
