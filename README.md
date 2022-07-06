@@ -135,20 +135,20 @@ These options are used by dump and restore.
 
 Either `uri` or `host`/`port`/`db`:
 
-| option | env          | required | default value | description                                                                                              |
-|--------|--------------|----------|---------------|----------------------------------------------------------------------------------------------------------|
-| `uri`  | MT_MONGO_URI | **true** | (none)        | mongodump uri, example `mongodb+srv://granted-user:MySecretHere@cluster0.xzryx.mongodb.net/tMyDatababse` |
+| option | env          | required | default value | description                                                                                                                                                   |
+|--------|--------------|----------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `uri`  | MT_MONGO_URI | **true** | (none)        | mongodump uri, example `mongodb+srv://granted-user:MySecretHere@cluster0.xzryx.mongodb.net/tMyDatababse`. You could omit database name to dump all databases. |
 
 or
 
-| option     | env              | required | default value | description                                                             |
-|------------|------------------|----------|---------------|-------------------------------------------------------------------------|
-| `db`       | MT_MONGO_DB      | **true** | (none)        | mongo database name. For dump only, you could set it to '*' to dump all |
-| `host`     | MT_MONGO_HOST    | false    | `127.0.0.1`   | mongo database hostname                                                 |
-| `port`     | MT_MONGO_PORT    | false    | `27017`       | mongo database port                                                     |
-| `username` | MT_MONGO_USER    | false    | (none)        | mongo database username                                                 |
-| `password` | MT_MONGO_PWD     | false    | (none)        | mongo database password                                                 |
-| `authDb`   | MT_MONGO_AUTH_DB | false    | `admin`       | mongo auth database                                                     |
+| option     | env              | required | default value | description                                                                         |
+|------------|------------------|----------|---------------|-------------------------------------------------------------------------------------|
+| `db`       | MT_MONGO_DB      | **true** | (none)        | mongo database name. For dump only, you could set it to `*` to dump all databases   |
+| `host`     | MT_MONGO_HOST    | false    | `127.0.0.1`   | mongo database hostname                                                             |
+| `port`     | MT_MONGO_PORT    | false    | `27017`       | mongo database port                                                                 |
+| `username` | MT_MONGO_USER    | false    | (none)        | mongo database username                                                             |
+| `password` | MT_MONGO_PWD     | false    | (none)        | mongo database password                                                             |
+| `authDb`   | MT_MONGO_AUTH_DB | false    | `admin`       | mongo auth database                                                                 |
 
 #### ssl options
 
