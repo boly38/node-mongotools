@@ -1,6 +1,6 @@
 {
   "name": "node-mongotools",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "node-mongotools: a mongotools wrapper for nodejs. Freely inspired from github.com/amulyakashyap09/mbr",
   "main": "./lib/mt.js",
   "scripts": {
