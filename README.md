@@ -51,6 +51,9 @@ node mt restore backup/myDatabase__2020-11-08_150102.gz
 
 # rotate backup files
 node mt rotation
+
+# Helper : show current options values
+node mt options
 ```
 
 ### Dropbox feature
