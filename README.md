@@ -166,17 +166,19 @@ Optional ssl related options
 
 ### mongodump options
 
-| option               | env       | required | default value           | description                                                           |
-|----------------------|-----------|----------|-------------------------|-----------------------------------------------------------------------|
-| `path`               | MT_PATH   | false    | `backup`                | dump target directory, created if it doesn't exist                    |
-| `dumpCmd `           |           | false    | `mongodump`             | mongodump binary                                                      |
-| `fileName`           |           | false    | `<dbName_date_time.gz>` | dump target filename                                                  |
-| `encrypt`            |           | false    | false                   | encrypt the dump using secret                                         |
-| `secret`             | MT_SECRET | false    | null                    | secret to use if encrypt is enabled                                   |
-| `encryptSuffix`      |           | false    | `.enc`                  | encrypt file suffix                                                   |
-| `includeCollections` |           | false    | (none)                  | **Deprecated** - please use `collection`                              |
-| `collection`         |           | false    | (none)                  | Collection to include, if not specified all collections are included  |
-| `excludeCollections` |           | false    | (none)                  | Collections to exclude, if not specified all collections are included |
+| option                   | env       | required | default value           | description                                                           |
+|--------------------------|-----------|----------|-------------------------|-----------------------------------------------------------------------|
+| `path`                   | MT_PATH   | false    | `backup`                | dump target directory, created if it doesn't exist                    |
+| `dumpCmd `               |           | false    | `mongodump`             | mongodump binary                                                      |
+| `fileName`               |           | false    | `<dbName_date_time.gz>` | dump target filename                                                  |
+| `encrypt`                |           | false    | false                   | encrypt the dump using secret                                         |
+| `secret`                 | MT_SECRET | false    | null                    | secret to use if encrypt is enabled                                   |
+| `encryptSuffix`          |           | false    | `.enc`                  | encrypt file suffix                                                   |
+| `includeCollections`     |           | false    | (none)                  | **Deprecated** - please use `collection`                              |
+| `collection`             |           | false    | (none)                  | Collection to include, if not specified all collections are included  |
+| `excludeCollections`     |           | false    | (none)                  | Collections to exclude, if not specified all collections are included |
+| `numParallelCollections` |           | false    | 4                       | Number of collections mongodump should export in parallel.            |
+| `viewsAsCollections`     |           | false    | false                   | When specified, mongodump exports read-only views as collections.     |
 
 Simple example:
 ```
