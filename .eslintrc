@@ -1,5 +1,6 @@
 { // https://eslint.org/docs/4.0.0/user-guide/configuring
     "parserOptions": {
+        "sourceType": "module",
         "ecmaVersion": 2017
     }
 }
