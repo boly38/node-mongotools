@@ -1,11 +1,14 @@
-const MTWrapper = require("../lib/MTWrapper");
-const MTOptions = require("../lib/MTOptions");
+import MongoTools from "../lib/MongoTools.js";
+import MTOptions from "../lib/MTOptions.js";
+import MTWrapper from "../lib/MTWrapper.js";
 
-const chai = require('chai');
-const assert = require('assert').strict;
-const expect = chai.expect
+import chai from 'chai';
+import chaiString from 'chai-string';
+const should = chai.should;
+const expect = chai.expect;
+import { strict as assert } from 'assert';
 chai.should();
-chai.use(require('chai-string'));
+chai.use(chaiString);
 
 const testDbUsername = process.env.MT_MONGO_USER || null;
 const testDbPassword = process.env.MT_MONGO_PWD || null;
