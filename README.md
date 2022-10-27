@@ -1,7 +1,7 @@
 # node-mongotools
 [![NPM](https://nodei.co/npm/node-mongotools.png?compact=true)](https://npmjs.org/package/node-mongotools)
 
-This project provide 2 wrappers :
+This project provides 2 wrappers :
 - **mongodump**,
 - **mongorestore**.
 
@@ -85,7 +85,8 @@ npm install node-mongotools
 
 ### Define the requirements, example:
 ``` 
-const { MongoTools, MTOptions } = require("node-mongotools")
+import { MongoTools, MTOptions, MTCommand } from "node-mongotools";
+
 var mongoTools = new MongoTools();
 const mtOptions = {
         db: 'myDb',
@@ -182,7 +183,7 @@ Optional ssl related options
 
 Simple example:
 ```
-const { MongoTools, MTOptions } = require("node-mongotools")
+import { MongoTools, MTOptions, MTCommand } from "node-mongotools";
 var mongoTools = new MongoTools();
 
 mongoTools.mongodump({ 
@@ -207,7 +208,7 @@ mongoTools.mongodump({
 
 Simple example:
 ```
-const { MongoTools, MTOptions } = require("node-mongotools")
+import { MongoTools, MTOptions, MTCommand } from "node-mongotools";
 var mongoTools = new MongoTools();
 
 mongoTools.mongorestore({ 

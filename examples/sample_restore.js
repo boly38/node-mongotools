@@ -1,4 +1,11 @@
-const { MongoTools, MTCommand } = require("node-mongotools")
+// in option to show the executed "command", add env variable like this
+// export MT_SHOW_COMMAND=true
+
+// node-mongotools users must use this line
+// import { MongoTools, MTOptions, MTCommand } from "node-mongotools";
+
+// import from inside project
+import { MongoTools, MTOptions, MTCommand } from "../lib/mt.js";
 
 async function restore(uri, dumpFile){
   var mt = new MongoTools();

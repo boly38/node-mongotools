@@ -1,5 +1,10 @@
-const os = require('os');
-const { MongoTools, MTCommand } = require("node-mongotools")
+import os from "os";
+
+// node-mongotools users must use this line
+// import { MongoTools, MTOptions, MTCommand } from "node-mongotools";
+
+// import from inside project
+import { MongoTools, MTOptions, MTCommand } from "../lib/mt.js";
 
 async function dumpAndRotate(uri, path){
   var mt = new MongoTools();
