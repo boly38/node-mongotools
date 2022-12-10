@@ -41,13 +41,13 @@
   },
   "dependencies": {
     "dateformat": "^5.0.3",
-    "dropbox-v2-api": "^2.5.3"
+    "dropbox-v2-api": "^2.5.9"
   },
   "devDependencies": {
     "chai": "^4.3.6",
     "chai-string": "^1.5.0",
-    "mocha": "^10.1.0",
     "minimatch": "^3.1.2",
+    "mocha": "^10.1.0",
     "npm-force-resolutions": "^0.0.10",
     "nyc": "^15.1.0"
   },
