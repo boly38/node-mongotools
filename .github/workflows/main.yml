@@ -56,6 +56,11 @@ jobs:
         echo "aptitude install mongodb-mongosh"
         sudo apt-get install -y mongodb-mongosh
 
+    - name: Setup mongoDB Tools # src: https://www.mongodb.com/docs/database-tools/installation/installation-linux/
+      run: |        
+        echo "aptitude install mongodb-database-tools"
+        sudo apt install mongodb-database-tools
+
     - name: Setup mongo user
       # doc: https://docs.mongodb.com/manual/reference/built-in-roles/ "Backup and Restoration Roles"
       # doc: https://docs.mongodb.com/manual/reference/method/db.createUser/
