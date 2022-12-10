@@ -6,6 +6,7 @@ coverage/
 
 #IntelliJ
 *.iml
+.idea/
 
 #Project defaukt backup directory
 dropbox/
