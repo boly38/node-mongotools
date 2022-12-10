@@ -55,8 +55,6 @@ jobs:
         sudo apt-get update
         echo "aptitude install mongodb-mongosh"
         sudo apt-get install -y mongodb-mongosh
-        echo "aptitude install mongodb-mongosh-shared-openssl11"
-        sudo apt-get install -y mongodb-mongosh-shared-openssl11
 
     - name: Setup mongo user
       # doc: https://docs.mongodb.com/manual/reference/built-in-roles/ "Backup and Restoration Roles"
