@@ -44,10 +44,27 @@ jobs:
       # - run: npm ci # need package.json.lock
       run: npm install
 
+    - name: Setup mongosh # src: https://www.mongodb.com/docs/mongodb-shell/install/
+      run: |
+        echo "setup keys"
+        wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+        sudo apt-get install gnupg
+        wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+        echo "aptitude update"
+        sudo apt-get update
+        echo "aptitude install mongodb-mongosh"
+        sudo apt-get install -y mongodb-mongosh
+
+    - name: Setup mongoDB Tools # src: https://www.mongodb.com/docs/database-tools/installation/installation-linux/
+      run: |        
+        echo "aptitude install mongodb-database-tools"
+        sudo apt install mongodb-database-tools
+
     - name: Setup mongo user
       # doc: https://docs.mongodb.com/manual/reference/built-in-roles/ "Backup and Restoration Roles"
       # doc: https://docs.mongodb.com/manual/reference/method/db.createUser/
-      run: mongo admin --eval 'db.createUser({user:"root",pwd:"mypass",roles:[{"role":"readWrite","db":"myDbForTest"}, "restore"]});'
+      run: mongosh admin --eval 'db.createUser({user:"root",pwd:"mypass",roles:[{"role":"readWrite","db":"myDbForTest"}, "restore"]});'
 
     - name: Run tests
       env:
