@@ -35,7 +35,7 @@ cp env/initEnv.template.sh env/initEnv.dontpush.sh
 ```
 
 ### Basic feature
-```
+```bash
 # create a mongo dump
 node mt dump
 
@@ -55,6 +55,25 @@ node mt rotation
 # Helper : show current options values
 node mt options
 ```
+
+### Add in-line extra options
+
+You could play with env default options plus in-line command extra options
+```bash
+# create dump of a given 'shippingprices' collection, provide a target backup name as '2023_01_shippingPrices.gz', and show mongodump command
+MT_COLLECTION=shippingprices MT_FILENAME=2023_01_shippingPrices.gz MT_SHOW_COMMAND=true node mt dump
+
+# show backup in list
+node mt list
+
+# using mongo: drop a given collection
+mongo myDb --eval "db.shippingprices.drop()"
+
+# restore collection
+MSYS_NO_PATHCONV=1 MT_COLLECTION=shippingprices MT_SHOW_COMMAND=true node mt restore /backup/2023_01_shippingprices.gz
+# Note that collection option will produce wildcard in nsInclude arg '--nsInclude myDb.*'
+```
+
 
 ### Dropbox feature
 
@@ -162,24 +181,24 @@ Optional ssl related options
 | `sslPEMKeyFile`      | MT_MONGO_SSL_PEM_KEY_FILE     |  false   | (none)         | .pem file containing the certificate and key                      |
 | `sslPEMKeyPassword`  | MT_MONGO_SSL_PEM_KEY_PASSWORD |  false   | (none)         | password to decrypt the sslPEMKeyFile, if necessary               |
 | `sslCRLFile`         | MT_MONGO_SSL_CRL_FILE         |  false   | (none)         | pem file containing the certificate revocation list               |
-| `sslFIPSMode`        | MT_MONGO_SSL_FIPS            |  false   | (none)         | if "1" then use FIPS mode of the installed openssl library        |
-| `tlsInsecure`        | MT_MONGO_TLS_INSECURE        |  false   | (none)         | if "1" then  bypass the validation for server's certificate chain |
+| `sslFIPSMode`        | MT_MONGO_SSL_FIPS             |  false   | (none)         | if "1" then use FIPS mode of the installed openssl library        |
+| `tlsInsecure`        | MT_MONGO_TLS_INSECURE         |  false   | (none)         | if "1" then  bypass the validation for server's certificate chain |
 
 ### mongodump options
 
-| option                   | env       | required | default value           | description                                                           |
-|--------------------------|-----------|----------|-------------------------|-----------------------------------------------------------------------|
-| `path`                   | MT_PATH   | false    | `backup`                | dump target directory, created if it doesn't exist                    |
-| `dumpCmd `               |           | false    | `mongodump`             | mongodump binary                                                      |
-| `fileName`               |           | false    | `<dbName_date_time.gz>` | dump target filename                                                  |
-| `encrypt`                |           | false    | false                   | encrypt the dump using secret                                         |
-| `secret`                 | MT_SECRET | false    | null                    | secret to use if encrypt is enabled                                   |
-| `encryptSuffix`          |           | false    | `.enc`                  | encrypt file suffix                                                   |
-| `includeCollections`     |           | false    | (none)                  | **Deprecated** - please use `collection`                              |
-| `collection`             |           | false    | (none)                  | Collection to include, if not specified all collections are included  |
-| `excludeCollections`     |           | false    | (none)                  | Collections to exclude, if not specified all collections are included |
-| `numParallelCollections` |           | false    | 4                       | Number of collections mongodump should export in parallel.            |
-| `viewsAsCollections`     |           | false    | false                   | When specified, mongodump exports read-only views as collections.     |
+| option                   | env                    | required | default value           | description                                                           |
+|--------------------------|------------------------|----------|-------------------------|-----------------------------------------------------------------------|
+| `path`                   | MT_PATH                | false    | `backup`                | dump target directory, created if it doesn't exist                    |
+| `dumpCmd `               |                        | false    | `mongodump`             | mongodump binary                                                      |
+| `fileName`               | MT_FILENAME            | false    | `<dbName_date_time.gz>` | dump target filename                                                  |
+| `encrypt`                |                        | false    | false                   | encrypt the dump using secret                                         |
+| `secret`                 | MT_SECRET              | false    | null                    | secret to use if encrypt is enabled                                   |
+| `encryptSuffix`          |                        | false    | `.enc`                  | encrypt file suffix                                                   |
+| `includeCollections`     |                        | false    | (none)                  | **Deprecated** - please use `collection`                              |
+| `collection`             | MT_COLLECTION          | false    | (none)                  | Collection to include, if not specified all collections are included  |
+| `excludeCollections`     | MT_EXCLUDE_COLLECTIONS | false    | (none)                  | Collections to exclude, if not specified all collections are included |
+| `numParallelCollections` |                        | false    | 4                       | Number of collections mongodump should export in parallel.            |
+| `viewsAsCollections`     |                        | false    | false                   | When specified, mongodump exports read-only views as collections.     |
 
 Simple example:
 ```
