@@ -45,7 +45,7 @@
     "dropbox-v2-api": "^2.5.10-next.3"
   },
   "devDependencies": {
-    "chai": "^4.3.7",
+    "chai": "^4.3.10",
     "chai-string": "^1.5.0",
     "json5": "^2.2.3",
     "mocha": "^10.2.0",
