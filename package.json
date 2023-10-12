@@ -53,7 +53,8 @@
     "nyc": "^15.1.0"
   },
   "resolutions": {
-    "json5": "^2.2.3"
+    "json5": "^2.2.3",
+    "samver": "^6.3.1"
   },
   "jshintConfig": {
     "esversion": 6
