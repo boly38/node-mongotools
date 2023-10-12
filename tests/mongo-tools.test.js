@@ -20,6 +20,7 @@ const testPort = process.env.MT_MONGO_PORT || 27017;
 const testDbToken = process.env.MT_DROPBOX_TOKEN || null;
 
 const testBackupDirectory = 'tests/backup';
+const testDropboxBackupDirectory = 'tests/dropbox';
 const testDbName = 'myDbForTest';
 const testDbUri = `mongodb://${testDbAuth}127.0.0.1:${testPort}/${testDbName}${testDbAuthSuffix}`;
 
@@ -154,6 +155,7 @@ describe("Mongo Tools", function () {
             db: testDbName,
             port: testPort,
             path: testBackupDirectory,
+            dropboxLocalPath: testDropboxBackupDirectory,
             fileName: 'should_dump_db_dropbox.gz',
             showCommand: true
         });
@@ -177,6 +179,14 @@ describe("Mongo Tools", function () {
             listResult.path.should.be.eql(testBackupDirectory);
         });
 
+        it("should restore database from dropbox", async function () {
+            withDropboxMtTestOptions.dumpFile = "/" + lastDumpFile;
+            const restoreResult = await mt.mongorestore(withDropboxMtTestOptions).catch(_expectNoError);
+            logSuccess(restoreResult);
+            restoreResult.dumpFile.should.be.eql(withDropboxMtTestOptions.dropboxLocalPath + '/' + withDropboxMtTestOptions.fileName);
+            restoreResult.status.should.be.eql(0);
+        });
+
         it("should rotation remove dropbox backup too", async () => {
             const rotateResult = await mt.rotation({
                 path: testBackupDirectory,
@@ -197,7 +207,6 @@ describe("Mongo Tools", function () {
             nbDropBoxBackup = 0;
             nbBackupExpected = 0;
         });
-
     }
 });
 

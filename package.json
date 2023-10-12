@@ -4,6 +4,7 @@
   "description": "node-mongotools: a mongotools wrapper for nodejs. Freely inspired from github.com/amulyakashyap09/mbr",
   "main": "./lib/mt.js",
   "scripts": {
+    "audit": "npm audit --omit=dev",
     "preinstall": "npx force-resolutions",
     "test-requirement": "echo You must do: source ./env/initEnv.test.sh",
     "test": "echo test&& mocha --exit --unhandled-rejections=strict tests/*.test.js --timeout 50000",
@@ -42,7 +43,7 @@
   },
   "dependencies": {
     "dateformat": "^5.0.3",
-    "dropbox-v2-api": "^2.5.10-next.3"
+    "dropbox": "^10.34.0"
   },
   "devDependencies": {
     "chai": "^4.3.10",
