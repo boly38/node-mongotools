@@ -13,6 +13,9 @@ Copy and source env/initEnv
 
 Update MT_MONGO_PORT, and if required MT_MONGO_USER, MT_MONGO_PWD
 
+In order to run unit test:
+    . ./env/initEnv.test.sh
+
 If you would like to play dropbox test, you may setup MT_DROPBOX_TOKEN too.
 
 ## Run tests

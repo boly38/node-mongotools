@@ -21,7 +21,7 @@ const testBackupDirectory = 'tests/backup';
 const testDbName = 'myDbForTest';
 const testDbUri = `mongodb://${testDbAuth}127.0.0.1:${testFixedPort}/${testDbName}${testDbAuthSuffix}`;
 
-var wrapper = new MTWrapper();
+const wrapper = new MTWrapper();
 
 describe("MTWrapper unit tests", function() {
 
@@ -32,7 +32,7 @@ describe("MTWrapper unit tests", function() {
         path: testBackupDirectory
       });
 
-      var command = wrapper.commandConnectFromOptions(mtOptions, '--beginning');
+      const command = wrapper.commandConnectFromOptions(mtOptions, '--beginning');
 
       command.should.be.eql("--beginning --host 127.0.0.1 --port 17017 --username root --password mypass --authenticationDatabase admin --db myDbForTest");
     });
@@ -49,7 +49,7 @@ describe("MTWrapper unit tests", function() {
         tlsInsecure: "1"
       });
 
-      var command = wrapper.commandConnectFromOptions(mtOptions, '--beginning');
+      const command = wrapper.commandConnectFromOptions(mtOptions, '--beginning');
 
       command.should.be.eql("--beginning --uri mongodb://root:mypass@127.0.0.1:17017/myDbForTest?authSource=admin "
       +"--ssl --sslCAFile /tmp/myCAfile --sslPEMKeyFile /tmp/pem/sslPEMKeyFile --sslPEMKeyPassword strongPassHere "
@@ -63,7 +63,7 @@ describe("MTWrapper unit tests", function() {
         path: testBackupDirectory
       });
 
-      var command = wrapper.commandConnectFromOptions(mtOptions, '--beginning', true);
+      const command = wrapper.commandConnectFromOptions(mtOptions, '--beginning', true);
 
       command.should.be.eql("--beginning --host 127.0.0.1 --port 17017 --username root --password mypass --authenticationDatabase admin --nsInclude myDbForTest");
     });
@@ -80,7 +80,7 @@ describe("MTWrapper unit tests", function() {
         tlsInsecure: "1"
       });
 
-      var command = wrapper.commandConnectFromOptions(mtOptions, '--beginning', true);
+      const command = wrapper.commandConnectFromOptions(mtOptions, '--beginning', true);
 
       command.should.be.eql("--beginning --uri mongodb://root:mypass@127.0.0.1:17017/myDbForTest?authSource=admin "
       +"--ssl --sslCAFile /tmp/myCAfile --sslPEMKeyFile /tmp/pem/sslPEMKeyFile --sslPEMKeyPassword strongPassHere "

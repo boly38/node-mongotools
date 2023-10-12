@@ -5,8 +5,8 @@
   "main": "./lib/mt.js",
   "scripts": {
     "preinstall": "npx force-resolutions",
+    "test-requirement": "echo You must do: source ./env/initEnv.test.sh",
     "test": "echo test&& mocha --exit --unhandled-rejections=strict tests/*.test.js --timeout 50000",
-    "wip": "echo test&& mocha --exit --unhandled-rejections=strict tests/mongo-wrapper-unit.test.js",
     "ci-test": "echo ci-test&& nyc --reporter text --reporter cobertura --reporter html --reporter=lcov --lines 66 mocha --exit --unhandled-rejections=strict tests/*.test.js --timeout 50000"
   },
   "type": "module",
@@ -35,7 +35,8 @@
     "years": [
       2020,
       2021,
-      2022
+      2022,
+      2023
     ],
     "author": "Brice Vandeputte"
   },
