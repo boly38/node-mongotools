@@ -305,3 +305,7 @@ npm run test
 | ![CI/CD](https://github.com/boly38/node-mongotools/workflows/mongotools-ci/badge.svg)                                                                              | Github actions                  | Continuous tests.                                         |
 | [![Audit](https://github.com/boly38/node-mongotools/actions/workflows/audit.yml/badge.svg)](https://github.com/boly38/node-mongotools/actions/workflows/audit.yml) | Github actions                  | Continuous vulnerability audit.                           |
 | [![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)                                                             | [Houndci](https://houndci.com/) | JavaScript  automated review (configured by `.hound.yml`) |
+
+### Contributions
+
+![Alt](https://repobeats.axiom.co/api/embed/6406b5b306aa531758e7787bbffb71cda2c4e4c7.svg "Repobeats analytics image")
