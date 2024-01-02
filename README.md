@@ -218,6 +218,8 @@ mongoTools.mongodump({
 
 | option                   | env          | required | default value  | description                                                    |
 |--------------------------|--------------|----------|----------------|----------------------------------------------------------------|
+| `dbFrom`               | MT_MONGO_DB_FROM | false     | (none)         | name of the source db (if `db` is not specified)
+| `dbTo`                 | MT_MONGO_DB_TO | false     | (none)         | name of the target db (if `db` is not specified)                                            |
 | `dumpFile`               | MT_DUMP_FILE | true     | (none)         | dump file to restore                                           |
 | `restoreCmd`             |              | false    | `mongorestore` | mongorestore binary                                            |
 | `dropBeforeRestore`      |              | false    | false          | set it to `true` to append `--drop` option                     |
