@@ -157,18 +157,18 @@ Either `uri` or `host`/`port`/`db`:
 
 | option | env          | required | default value | description                                                                                                                                                   |
 |--------|--------------|----------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `uri`  | MT_MONGO_URI | **true** | (none)        | mongodump uri, example `mongodb+srv://granted-user:MySecretHere@cluster0.xzryx.mongodb.net/tMyDatababse`. You could omit database name to dump all databases. |
+| `uri`  | `MT_MONGO_URI` | **true** | (none)        | mongodump uri, example `mongodb+srv://granted-user:MySecretHere@cluster0.xzryx.mongodb.net/tMyDatababse`. You could omit database name to dump all databases. |
 
 or
 
 | option     | env              | required | default value | description                                                                         |
 |------------|------------------|----------|---------------|-------------------------------------------------------------------------------------|
-| `db`       | MT_MONGO_DB      | **true** | (none)        | mongo database name. For dump only, you could set it to `*` to dump all databases   |
-| `host`     | MT_MONGO_HOST    | false    | `127.0.0.1`   | mongo database hostname                                                             |
-| `port`     | MT_MONGO_PORT    | false    | `27017`       | mongo database port                                                                 |
-| `username` | MT_MONGO_USER    | false    | (none)        | mongo database username                                                             |
-| `password` | MT_MONGO_PWD     | false    | (none)        | mongo database password                                                             |
-| `authDb`   | MT_MONGO_AUTH_DB | false    | `admin`       | mongo auth database                                                                 |
+| `db`       | `MT_MONGO_DB`      | **true** | (none)        | mongo database name. For dump only, you could set it to `*` to dump all databases   |
+| `host`     | `MT_MONGO_HOST`    | false    | `127.0.0.1`   | mongo database hostname                                                             |
+| `port`     | `MT_MONGO_PORT`    | false    | `27017`       | mongo database port                                                                 |
+| `username` | `MT_MONGO_USER`    | false    | (none)        | mongo database username                                                             |
+| `password` | `MT_MONGO_PWD`     | false    | (none)        | mongo database password                                                             |
+| `authDb`   | `MT_MONGO_AUTH_DB` | false    | `admin`       | mongo auth database                                                                 |
 
 #### ssl options
 
@@ -176,27 +176,27 @@ Optional ssl related options
 
 | option               | env                           | required | default value  | description                                                       |
 |----------------------|-------------------------------|----------|----------------|-------------------------------------------------------------------|
-| `ssl`                | MT_MONGO_SSL                  |  false   | (none)         | if "1" then add `--ssl` option                                    |
-| `sslCAFile`          | MT_MONGO_SSL_CA_FILE          |  false   | (none)         | .pem file containing the root certificate chain                   |
-| `sslPEMKeyFile`      | MT_MONGO_SSL_PEM_KEY_FILE     |  false   | (none)         | .pem file containing the certificate and key                      |
-| `sslPEMKeyPassword`  | MT_MONGO_SSL_PEM_KEY_PASSWORD |  false   | (none)         | password to decrypt the sslPEMKeyFile, if necessary               |
-| `sslCRLFile`         | MT_MONGO_SSL_CRL_FILE         |  false   | (none)         | pem file containing the certificate revocation list               |
-| `sslFIPSMode`        | MT_MONGO_SSL_FIPS             |  false   | (none)         | if "1" then use FIPS mode of the installed openssl library        |
-| `tlsInsecure`        | MT_MONGO_TLS_INSECURE         |  false   | (none)         | if "1" then  bypass the validation for server's certificate chain |
+| `ssl`                | `MT_MONGO_SSL`                  |  false   | (none)         | if "1" then add `--ssl` option                                    |
+| `sslCAFile`          | `MT_MONGO_SSL_CA_FILE`          |  false   | (none)         | .pem file containing the root certificate chain                   |
+| `sslPEMKeyFile`      | `MT_MONGO_SSL_PEM_KEY_FILE`     |  false   | (none)         | .pem file containing the certificate and key                      |
+| `sslPEMKeyPassword`  | `MT_MONGO_SSL_PEM_KEY_PASSWORD` |  false   | (none)         | password to decrypt the sslPEMKeyFile, if necessary               |
+| `sslCRLFile`         | `MT_MONGO_SSL_CRL_FILE`         |  false   | (none)         | pem file containing the certificate revocation list               |
+| `sslFIPSMode`        | `MT_MONGO_SSL_FIPS`             |  false   | (none)         | if "1" then use FIPS mode of the installed openssl library        |
+| `tlsInsecure`        | `MT_MONGO_TLS_INSECURE`         |  false   | (none)         | if "1" then  bypass the validation for server's certificate chain |
 
 ### mongodump options
 
 | option                   | env                    | required | default value           | description                                                           |
 |--------------------------|------------------------|----------|-------------------------|-----------------------------------------------------------------------|
-| `path`                   | MT_PATH                | false    | `backup`                | dump target directory, created if it doesn't exist                    |
-| `dumpCmd `               |                        | false    | `mongodump`             | mongodump binary                                                      |
-| `fileName`               | MT_FILENAME            | false    | `<dbName_date_time.gz>` | dump target filename                                                  |
+| `path`                   | `MT_PATH`                | false    | `backup`                | dump target directory, created if it doesn't exist                    |
+| `dumpCmd `               | `MT_MONGODUMP`           | false    | `mongodump`             | mongodump binary                                                      |
+| `fileName`               | `MT_FILENAME`            | false    | `<dbName_date_time.gz>` | dump target filename                                                  |
 | `encrypt`                |                        | false    | false                   | encrypt the dump using secret                                         |
-| `secret`                 | MT_SECRET              | false    | null                    | secret to use if encrypt is enabled                                   |
+| `secret`                 | `MT_SECRET`              | false    | null                    | secret to use if encrypt is enabled                                   |
 | `encryptSuffix`          |                        | false    | `.enc`                  | encrypt file suffix                                                   |
 | `includeCollections`     |                        | false    | (none)                  | **Deprecated** - please use `collection`                              |
-| `collection`             | MT_COLLECTION          | false    | (none)                  | Collection to include, if not specified all collections are included  |
-| `excludeCollections`     | MT_EXCLUDE_COLLECTIONS | false    | (none)                  | Collections to exclude, if not specified all collections are included |
+| `collection`             | `MT_COLLECTION`          | false    | (none)                  | Collection to include, if not specified all collections are included  |
+| `excludeCollections`     | `MT_EXCLUDE_COLLECTIONS` | false    | (none)                  | Collections to exclude, if not specified all collections are included |
 | `numParallelCollections` |                        | false    | 4                       | Number of collections mongodump should export in parallel.            |
 | `viewsAsCollections`     |                        | false    | false                   | When specified, mongodump exports read-only views as collections.     |
 
@@ -216,16 +216,16 @@ mongoTools.mongodump({
 
 ### mongorestore options
 
-| option                   | env          | required | default value  | description                                                    |
-|--------------------------|--------------|----------|----------------|----------------------------------------------------------------|
-| `dbFrom`               | MT_MONGO_DB_FROM | false     | (none)         | name of the source db (if `db` is not specified)
-| `dbTo`                 | MT_MONGO_DB_TO | false     | (none)         | name of the target db (if `db` is not specified)                                            |
-| `dumpFile`               | MT_DUMP_FILE | true     | (none)         | dump file to restore                                           |
-| `restoreCmd`             |              | false    | `mongorestore` | mongorestore binary                                            |
-| `dropBeforeRestore`      |              | false    | false          | set it to `true` to append `--drop` option                     |
-| `deleteDumpAfterRestore` |              | false    | false          | set it to `true` to remove restored backup file                |
-| `decrypt`                |              | false    | false          | decrypt the dump using secret. Activated if suffix is detected |
-| `secret`                 | MT_SECRET    | false    | null           | secret to use if decrypt is enabled                            |
+| option                   | env              | required | default value  | description                                                    |
+|--------------------------|------------------|----------|----------------|----------------------------------------------------------------|
+| `dbFrom`               | `MT_MONGO_DB_FROM` | false     | (none)         | name of the source db (if `db` is not specified)
+| `dbTo`                 | `MT_MONGO_DB_TO`   | false     | (none)         | name of the target db (if `db` is not specified)                                            |
+| `dumpFile`               | `MT_DUMP_FILE`     | true     | (none)         | dump file to restore                                           |
+| `restoreCmd`             | `MT_MONGORESTORE`  | false    | `mongorestore` | mongorestore binary                                            |
+| `dropBeforeRestore`      |                  | false    | false          | set it to `true` to append `--drop` option                     |
+| `deleteDumpAfterRestore` |                  | false    | false          | set it to `true` to remove restored backup file                |
+| `decrypt`                |                  | false    | false          | decrypt the dump using secret. Activated if suffix is detected |
+| `secret`                 | `MT_SECRET`        | false    | null           | secret to use if decrypt is enabled                            |
 
 Simple example:
 ```
@@ -248,10 +248,10 @@ mongoTools.mongorestore({
 ### Dropbox options
 You could create a dropbox app to get a token : cf. https://www.dropbox.com/developers/apps/  "Generated access token"
 
-| option             |  env                  |  required | default value   | description                                       |
-|--------------------|-----------------------|-----------|-----------------|---------------------------------------------------|
-| `dropboxToken`     | MT_DROPBOX_TOKEN      | false     | (none)          | activate dropbox feature if present               |
-| `dropboxLocalPath` | MT_DROPBOX_LOCAL_PATH | false     | "dropbox"       | local directory to receive dropbox dump           |
+| option             | env                    |  required | default value   | description                                       |
+|--------------------|------------------------|-----------|-----------------|---------------------------------------------------|
+| `dropboxToken`     | `MT_DROPBOX_TOKEN`     | false     | (none)          | activate dropbox feature if present               |
+| `dropboxLocalPath` | `MT_DROPBOX_LOCAL_PATH` | false     | "dropbox"       | local directory to receive dropbox dump           |
 
 When a token is set, 
 - the `list` feature will list the `/` + `path` dropbox directory
@@ -272,10 +272,10 @@ Backup out of safe time windows are called `deprecated backup`.
 
 | option                | env                      | required | default value | description                                            |
 |-----------------------|--------------------------|----------|---------------|--------------------------------------------------------|
-| `rotationDryMode`     | MT_ROTATION_DRY_MODE     | false    | false         | dont do delete actions, just print it                  |
-| `rotationWindowsDays` | MT_ROTATION_WINDOWS_DAYS | true     | 15            | safe time windows in days since now                    |
-| `rotationMinCount`    | MT_ROTATION_MIN_COUNT    | true     | 2             | minimum deprecated backups to keep.                    |
-| `rotationCleanCount`  | MT_ROTATION_CLEAN_COUNT  | true     | 10            | number of (oldest first) deprecated backups to delete. |
+| `rotationDryMode`     | `MT_ROTATION_DRY_MODE`     | false    | false         | dont do delete actions, just print it                  |
+| `rotationWindowsDays` | `MT_ROTATION_WINDOWS_DAYS` | true     | 15            | safe time windows in days since now                    |
+| `rotationMinCount`    | `MT_ROTATION_MIN_COUNT`    | true     | 2             | minimum deprecated backups to keep.                    |
+| `rotationCleanCount`  | `MT_ROTATION_CLEAN_COUNT`  | true     | 10            | number of (oldest first) deprecated backups to delete. |
 
 Simple example:
 ```

@@ -72,6 +72,7 @@ describe("MTWrapper unit tests", function() {
 
     it("should wrap restore commandConnectFromOptions db user basic source and target dbs", async function() {
       const mtOptions = new MTOptions({
+        db: null,
         dbFrom: testSourceDbName,
         dbTo: testTargetDbName,
         port: testFixedPort,
