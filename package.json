@@ -2,6 +2,9 @@
   "name": "node-mongotools",
   "version": "2.2.1",
   "description": "node-mongotools: a mongotools wrapper for nodejs. Freely inspired from github.com/amulyakashyap09/mbr",
+  "author": "Boly38 <boly38@gmail.com>",
+  "license": "MIT",
+  "type": "module",
   "main": "./lib/mt.js",
   "scripts": {
     "audit": "npm audit --omit=dev",
@@ -10,9 +13,6 @@
     "test": "echo test&& mocha --exit --unhandled-rejections=strict tests/*.test.js --timeout 50000",
     "ci-test": "echo ci-test&& nyc --reporter text --reporter cobertura --reporter html --reporter=lcov --lines 66 mocha --exit --unhandled-rejections=strict tests/*.test.js --timeout 50000"
   },
-  "type": "module",
-  "author": "Boly38 <boly38@gmail.com>",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/boly38/node-mongotools.git"
