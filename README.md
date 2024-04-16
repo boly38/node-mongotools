@@ -253,10 +253,16 @@ mongoTools.mongorestore({
 ### Dropbox options
 You could create a dropbox app to get a token : cf. https://www.dropbox.com/developers/apps/  "Generated access token"
 
-| option             | env                    |  required | default value   | description                                       |
-|--------------------|------------------------|-----------|-----------------|---------------------------------------------------|
-| `dropboxToken`     | `MT_DROPBOX_TOKEN`     | false     | (none)          | activate dropbox feature if present               |
-| `dropboxLocalPath` | `MT_DROPBOX_LOCAL_PATH` | false     | "dropbox"       | local directory to receive dropbox dump           |
+| option                | env                        |  required | default value   | description                                                          |
+|-----------------------|----------------------------|-----------|-----------------|----------------------------------------------------------------------|
+| `dropboxLocalPath`    | `MT_DROPBOX_LOCAL_PATH`    | false     | "dropbox"       | local directory to receive dropbox dump                              |
+| `dropboxAppKey`       | `MT_DROPBOX_APP_KEY`       | false     | (none)          | (refresh token based) dropbox feature application key. (*1)          |
+| `dropboxAppSecret`    | `MT_DROPBOX_APP_SECRET`    | false     | (none)          | (refresh token based) dropbox feature application secret. (*1)       |
+| `dropboxRefreshToken` | `MT_DROPBOX_REFRESH_TOKEN` | false     | (none)          | (refresh token based) dropbox feature application refreshToken. (*1) |
+| `dropboxToken` (*2)   | `MT_DROPBOX_TOKEN`         | false     | (none)          | DEPRECATED - activate dropbox feature if present. (*2)               |
+
+(*1) `dropboxAppKey`, `dropboxAppSecret` and `dropboxRefreshToken` (long-lived offline refresh token) are required to activate optional dropbox feature. You have some help about how to get them in [dropbox-refresh-token](https://github.com/boly38/dropbox-refresh-token) dedicated helper repository.
+(*2) `dropboxToken` option is DEPRECATED : This was legacy old-long-lived access-token - this kind of token are no more available from dropbox developers portal ([src](https://dropbox.tech/developers/migrating-app-permissions-and-access-tokens)). Please switch to `dropboxAppKey`, `dropboxAppSecret`, and `dropboxRefreshToken` instead. For now this is still supported.
 
 When a token is set, 
 - the `list` feature will list the `/` + `path` dropbox directory
