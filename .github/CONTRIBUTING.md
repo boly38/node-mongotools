@@ -4,8 +4,12 @@
 
 Please create an [issue](https://github.com/boly38/node-mongotools/issues) describing your goal / question / bug description...
 
+If you're interested in an existing issue, please contribute by up-voting for it by adding a :+1:.
+
 If you want to push some code :
 - fork and prepare a feature-git-branch, then create a [pull request](https://github.com/boly38/node-mongotools/pulls) that link your issue.
+
+You could also be critic with existing ticket/PR : all constructive feedbacks are welcome.
 
 # Maintainer HowTos
 ## HowTo create a fresh version
