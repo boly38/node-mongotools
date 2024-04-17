@@ -7,10 +7,12 @@
   "type": "module",
   "main": "./lib/mt.js",
   "scripts": {
+    "lint": "eslint .",
     "audit": "npm audit --omit=dev",
     "preinstall": "npx force-resolutions",
     "test-requirement": "echo You must do: source ./env/initEnv.test.sh",
     "test": "echo test&& mocha --exit --unhandled-rejections=strict tests/*.test.js --timeout 50000",
+    "test21": "echo beta test with nodejs 21&& node --test --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=lcov.info --test tests",
     "ci-test": "echo ci-test&& nyc --reporter text --reporter cobertura --reporter html --reporter=lcov --lines 66 mocha --exit --unhandled-rejections=strict tests/*.test.js --timeout 50000"
   },
   "repository": {
@@ -46,10 +48,17 @@
     "dropbox": "^10.34.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/node": "^20.12.7",
     "chai": "^4.3.10",
     "chai-string": "^1.5.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-eslint-plugin": "^6.0.0",
+    "eslint-plugin-mocha": "^10.4.2",
+    "eslint-plugin-node": "^11.1.0",
+    "globals": "^15.0.0",
     "json5": "^2.2.3",
-    "mocha": "^10.2.0",
+    "mocha": "^10.4.0",
     "npm-force-resolutions": "^0.0.10",
     "nyc": "^15.1.0"
   },
