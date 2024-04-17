@@ -1,16 +1,7 @@
 import MongoTools from "../lib/MongoTools.js";
 import MTOptions from "../lib/MTOptions.js";
+import {before, describe, it, expect} from './testLib.js';
 import fs from 'fs';
-
-import chai from 'chai';
-import chaiString from 'chai-string';
-
-const should = chai.should;
-const expect = chai.expect;
-import {strict as assert} from 'assert';
-
-chai.should();
-chai.use(chaiString);
 
 const testDbUsername = process.env.MT_MONGO_USER || null;
 const testDbPassword = process.env.MT_MONGO_PWD || null;
@@ -49,9 +40,10 @@ function logSuccess(success) {
 
 describe("Mongo Tools", function () {
 
-    before(async function () {
+    before(() => {
         console.info("Mongo Tools :: before");
         fs.rmSync(testBackupDirectory, {recursive: true, force: true});
+        fs.mkdirSync(testBackupDirectory, {recursive: true})
         nbBackupExpected = 0;
         mt = new MongoTools();
         mtOptions = new MTOptions({
@@ -62,154 +54,216 @@ describe("Mongo Tools", function () {
             dropboxToken: null,
             showCommand: true
         });
-
-        console.log("MTOptions", mtOptions);
+        // DEBUG // console.log("MTOptions", mtOptions);
     });
 
-    it("should dump database locally", async function () {
-        const dumpResult = await mt.mongodump(mtOptions).catch(_expectNoError);
-        logSuccess(dumpResult);
-        dumpResult.fileName.should.not.be.eql(null);
-        dumpResult.fullFileName.should.not.be.eql(null);
-        lastDumpFile = dumpResult.fullFileName;
-        nbBackupExpected++;
+    it("should not dump with invalid parameter", done => {
+        mtOptions.numParallelCollections = "Error because I'm not an integer ^^";
+        mt.mongodump(mtOptions)
+            .then(result => expect.fail("expect error but got", result))
+            .catch(err => {
+                expect(err.message).to.be.eql('"numParallelCollections" option must be an integer.');
+                mtOptions.numParallelCollections = undefined;
+                done();
+            });
+
     });
 
-    it("should dump database from uri", async function () {
-        const dumpResult = await mt.mongodump(new MTOptions({
+    it("should dump database locally", done => {
+        mt.mongodump(mtOptions)
+            .then(dumpResult => {
+                logSuccess(dumpResult);
+                dumpResult.fileName.should.not.be.eql(null);
+                dumpResult.fullFileName.should.not.be.eql(null);
+                lastDumpFile = dumpResult.fullFileName;
+                nbBackupExpected++;
+                done();
+            })
+            .catch(_expectNoError);
+    });
+
+    it("should dump database from uri", done => {
+        mt.mongodump(new MTOptions({
             uri: testDbUri,
             path: testBackupDirectory,
             dropboxToken: null,
             showCommand: true
-        })).catch(_expectNoError);
-        logSuccess(dumpResult);
-        dumpResult.fileName.should.not.be.eql(null);
-        dumpResult.fullFileName.should.not.be.eql(null);
-        dumpResult.fullFileName.should.startWith('tests/backup/myDbForTest__2');
-        lastDumpFile = dumpResult.fullFileName;
-        nbBackupExpected++;
+        }))
+            .then(dumpResult => {
+                logSuccess(dumpResult);
+                dumpResult.fileName.should.not.be.eql(null);
+                dumpResult.fullFileName.should.not.be.eql(null);
+                dumpResult.fullFileName.should.startsWith('tests/backup/myDbForTest__2');
+                lastDumpFile = dumpResult.fullFileName;
+                nbBackupExpected++;
+                done();
+            })
+            .catch(_expectNoError);
     });
 
-    it("should restore database", async function () {
+    it("should restore database", done => {
         mtOptions.dumpFile = lastDumpFile;
-        const restoreResult = await mt.mongorestore(mtOptions).catch(_expectNoError);
-        logSuccess(restoreResult);
-        restoreResult.dumpFile.should.be.eql(lastDumpFile);
-        restoreResult.status.should.be.eql(0);
+        mt.mongorestore(mtOptions)
+            .then(restoreResult => {
+                logSuccess(restoreResult);
+                restoreResult.dumpFile.should.be.eql(lastDumpFile);
+                restoreResult.status.should.be.eql(0);
+                done();
+            })
+            .catch(_expectNoError);
     });
 
-    it("should list backup", async function () {
-        const listResult = await mt.list(mtOptions).catch(_expectNoError);
-        logSuccess(listResult);
-        expect(listResult.filesystem).to.have.lengthOf(nbBackupExpected);
-        expect(listResult.filesystem).to.include(lastDumpFile)
-        listResult.path.should.be.eql(testBackupDirectory);
+    it("should list backup", done => {
+        mt.list(mtOptions)
+            .then(listResult => {
+                logSuccess(listResult);
+                expect(listResult.filesystem).to.have.lengthOf(nbBackupExpected);
+                expect(listResult.filesystem).to.include(lastDumpFile)
+                listResult.path.should.be.eql(testBackupDirectory);
+                done();
+            })
+            .catch(_expectNoError);
     });
 
-    it("should dry rotate backups", async function () {
-        const rotateResult = await mt.rotation({
+    it("should dry rotate backups", done => {
+        mt.rotation({
             path: testBackupDirectory,
             dropboxToken: null,
             rotationWindowsDays: 0,
             rotationMinCount: 0,
             rotationDryMode: true
-        }).catch(_expectNoError);
-        logSuccess(rotateResult);
-        rotateResult.filesystem.initialBackupsCount.should.be.eql(nbBackupExpected);
-        rotateResult.filesystem.deprecatedBackupsCount.should.be.eql(nbBackupExpected);
-        rotateResult.filesystem.cleanedCount.should.be.eql(nbBackupExpected);
+        })
+            .then(rotateResult => {
+                logSuccess(rotateResult);
+                rotateResult.filesystem.initialBackupsCount.should.be.eql(nbBackupExpected);
+                rotateResult.filesystem.deprecatedBackupsCount.should.be.eql(nbBackupExpected);
+                rotateResult.filesystem.cleanedCount.should.be.eql(nbBackupExpected);
+                done();
+            })
+            .catch(_expectNoError);
     });
 
-    it("should rotate backups", async function () {
-        const rotateResult = await mt.rotation({
+    it("should rotate backups", done => {
+        mt.rotation({
             path: testBackupDirectory,
             dropboxToken: null,
             rotationWindowsDays: 0,
             rotationMinCount: 0
-        }).catch(_expectNoError);
-        logSuccess(rotateResult);
-        rotateResult.filesystem.initialBackupsCount.should.be.eql(nbBackupExpected);
-        rotateResult.filesystem.deprecatedBackupsCount.should.be.eql(nbBackupExpected);
-        rotateResult.filesystem.cleanedCount.should.be.eql(nbBackupExpected);
-        nbBackupExpected = 0;
+        })
+            .then(rotateResult => {
+                logSuccess(rotateResult);
+                rotateResult.filesystem.initialBackupsCount.should.be.eql(nbBackupExpected);
+                rotateResult.filesystem.deprecatedBackupsCount.should.be.eql(nbBackupExpected);
+                rotateResult.filesystem.cleanedCount.should.be.eql(nbBackupExpected);
+                nbBackupExpected = 0;
+                done();
+            })
+            .catch(_expectNoError);
+
     });
 
-    it("should rotate no backups", async function () {
-        const rotateResult = await mt.rotation({
+    it("should rotate no backups", done => {
+        mt.rotation({
             path: testBackupDirectory,
             dropboxToken: null,
             rotationWindowsDays: 0,
             rotationMinCount: 0,
             rotationDryMode: true
-        }).catch(_expectNoError);
-        logSuccess(rotateResult);
-        rotateResult.filesystem.initialBackupsCount.should.be.eql(0);
-        rotateResult.filesystem.deprecatedBackupsCount.should.be.eql(0);
-        rotateResult.filesystem.cleanedCount.should.be.eql(0);
+        })
+            .then(rotateResult => {
+                logSuccess(rotateResult);
+                rotateResult.filesystem.initialBackupsCount.should.be.eql(0);
+                rotateResult.filesystem.deprecatedBackupsCount.should.be.eql(0);
+                rotateResult.filesystem.cleanedCount.should.be.eql(0);
+                done();
+            })
+            .catch(_expectNoError);
     });
 
-    if (testDbToken !== null) {
-        let nbDropBoxBackup = 0;
+});
 
-        const withDropboxMtTestOptions = new MTOptions({
-            db: testDbName,
-            port: testPort,
-            path: testBackupDirectory,
-            dropboxLocalPath: testDropboxBackupDirectory,
-            fileName: 'should_dump_db_dropbox.gz',
-            showCommand: true
+if (testDbToken !== null) {
+    let nbDropBoxBackup = 0;
+    let withDropboxMtTestOptions = null;
+    describe("Mongo Tools with Dropbox", function () {
+
+        before(() => {
+            console.info("Mongo Tools  with Dropbox :: before");
+            withDropboxMtTestOptions = new MTOptions({
+                db: testDbName,
+                port: testPort,
+                path: testBackupDirectory,
+                dropboxLocalPath: testDropboxBackupDirectory,
+                fileName: 'should_dump_db_dropbox.gz',
+                showCommand: true
+            });
+        })
+
+        it("should dump database on dropbox", done => {
+            mt.mongodump(withDropboxMtTestOptions)
+                .then(dumpResult => {
+                    logSuccess(dumpResult);
+                    dumpResult.fileName.should.not.be.eql(null);
+                    dumpResult.fullFileName.should.not.be.eql(null);
+                    lastDumpFile = dumpResult.fullFileName;
+                    nbDropBoxBackup++;
+                    done();
+                })
+                .catch(_expectNoError);
         });
 
-        it("should dump database on dropbox", async function () {
-            const dumpResult = await mt.mongodump(withDropboxMtTestOptions).catch(_expectNoError);
-            logSuccess(dumpResult);
-            dumpResult.fileName.should.not.be.eql(null);
-            dumpResult.fullFileName.should.not.be.eql(null);
-            lastDumpFile = dumpResult.fullFileName;
-            nbDropBoxBackup++;
+        it("should list include dropbox backup", done => {
+            mt.list(withDropboxMtTestOptions)
+                .then(listResult => {
+                    logSuccess(listResult);
+                    expect(listResult.filesystem).to.have.lengthOf(nbBackupExpected + nbDropBoxBackup);
+                    expect(listResult.dropbox).to.have.lengthOf(nbDropBoxBackup);
+                    expect(listResult.dropbox).to.include("/" + lastDumpFile);
+                    expect(listResult.filesystem).to.include(lastDumpFile);
+                    listResult.path.should.be.eql(testBackupDirectory);
+                    done();
+                })
+                .catch(_expectNoError);
         });
 
-        it("should list include dropbox backup", async () => {
-            const listResult = await mt.list(withDropboxMtTestOptions).catch(_expectNoError);
-            logSuccess(listResult);
-            expect(listResult.filesystem).to.have.lengthOf(nbBackupExpected + nbDropBoxBackup);
-            expect(listResult.dropbox).to.have.lengthOf(nbDropBoxBackup);
-            expect(listResult.dropbox).to.include("/" + lastDumpFile);
-            expect(listResult.filesystem).to.include(lastDumpFile);
-            listResult.path.should.be.eql(testBackupDirectory);
-        });
-
-        it("should restore database from dropbox", async function () {
+        it("should restore database from dropbox", done => {
             withDropboxMtTestOptions.dumpFile = "/" + lastDumpFile;
-            const restoreResult = await mt.mongorestore(withDropboxMtTestOptions).catch(_expectNoError);
-            logSuccess(restoreResult);
-            restoreResult.dumpFile.should.be.eql(withDropboxMtTestOptions.dropboxLocalPath + '/' + withDropboxMtTestOptions.fileName);
-            restoreResult.status.should.be.eql(0);
+            mt.mongorestore(withDropboxMtTestOptions)
+                .then(restoreResult => {
+                    logSuccess(restoreResult);
+                    restoreResult.dumpFile.should.be.eql(withDropboxMtTestOptions.dropboxLocalPath + '/' + withDropboxMtTestOptions.fileName);
+                    restoreResult.status.should.be.eql(0);
+                    done();
+                })
+                .catch(_expectNoError);
         });
 
-        it("should rotation remove dropbox backup too", async () => {
-            const rotateResult = await mt.rotation({
+        it("should rotation remove dropbox backup too", done => {
+            mt.rotation({
                 path: testBackupDirectory,
                 rotationWindowsDays: 0,
                 rotationMinCount: 0,
-            }).catch(_expectNoError);
+            })
+                .then(rotateResult => {
+                    logSuccess(rotateResult);
 
-            logSuccess(rotateResult);
+                    rotateResult.filesystem.initialBackupsCount.should.be.eql(nbBackupExpected + nbDropBoxBackup);
+                    rotateResult.filesystem.deprecatedBackupsCount.should.be.eql(nbBackupExpected + nbDropBoxBackup);
+                    rotateResult.filesystem.cleanedCount.should.be.eql(nbBackupExpected + nbDropBoxBackup);
 
-            rotateResult.filesystem.initialBackupsCount.should.be.eql(nbBackupExpected + nbDropBoxBackup);
-            rotateResult.filesystem.deprecatedBackupsCount.should.be.eql(nbBackupExpected + nbDropBoxBackup);
-            rotateResult.filesystem.cleanedCount.should.be.eql(nbBackupExpected + nbDropBoxBackup);
+                    rotateResult.dropbox.deprecatedBackupsCount.should.be.eql(nbDropBoxBackup);
+                    rotateResult.dropbox.cleanedCount.should.be.eql(nbDropBoxBackup);
+                    expect(rotateResult.dropbox.cleanedFiles).to.include("/" + lastDumpFile);
 
-            rotateResult.dropbox.deprecatedBackupsCount.should.be.eql(nbDropBoxBackup);
-            rotateResult.dropbox.cleanedCount.should.be.eql(nbDropBoxBackup);
-            expect(rotateResult.dropbox.cleanedFiles).to.include("/" + lastDumpFile);
+                    nbDropBoxBackup = 0;
+                    nbBackupExpected = 0;
+                    done();
+                })
+                .catch(_expectNoError);
 
-            nbDropBoxBackup = 0;
-            nbBackupExpected = 0;
         });
-    }
-});
-
+    });
+}
 
 function _expectNoError(err) {
     console.trace(err)

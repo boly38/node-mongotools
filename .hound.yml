@@ -1,5 +1,8 @@
 jshint:
   config_file: .jshintrc
+# ESLint supported version
+# http://help.houndci.com/en/articles/2461415-supported-linters
 eslint:
   enabled: true
-  config_file: .eslintrc
+  version: 8.1.0
+  config_file: .hound_eslint_config.json
