@@ -20,22 +20,31 @@ From a GitHub Actions context, you can install them via [action-mongo-tools](htt
 
 
 ## Command line usage
+You should decide to install it globally without getting source or by cloning repository.
 
-### Initial setup - first time only
+### Install globally (beta)
+```bash
+npm install -g node-mongotools@latest
 ```
-# get source code
+When using a global install `mt` command must be directly available (ie. you can replace `node mt` by `mt` in examples).
+
+### Install by getting source 
+```bash
 git clone https://github.com/boly38/node-mongotools.git
 # install dependencies
 npm install
+```
 
+### Environment setup - first time only
+```bash
 #~ setup environment variables
 cp env/initEnv.template.sh env/initEnv.dontpush.sh
 # you must update env/initEnv.dontpush.sh
 ```
 
 ### Set your preferences
-```
-# source your options
+source your options
+```bash
 . ./env/initEnv.dontpush.sh
 ```
 
@@ -43,6 +52,9 @@ cp env/initEnv.template.sh env/initEnv.dontpush.sh
 ```bash
 # create a mongo dump
 node mt dump
+# or if you rely on a global install
+# mt dump
+# apply the same logic for next examples 
 
 # create a encrypted mongo dump
 node mt dumpz
