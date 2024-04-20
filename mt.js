@@ -4,5 +4,3 @@ import process from "node:process";
 // take first command line argument
 const action = process.argv.slice(2)[0];
 (new MTCommand()).doAction(action);
-
-// TODO package : //   "bin": "./lib/mt.js", TODO #80
