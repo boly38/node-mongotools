@@ -1,5 +1,5 @@
 #!/bin/bash
-export MT_MONGO_DB=myDatabase
+export MT_MONGO_DB=node-mongotools-test
 export MT_MONGO_PORT=37017
 export MT_MONGO_USER=root
 export MT_MONGO_PWD=mypass
