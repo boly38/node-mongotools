@@ -6,6 +6,7 @@
   "license": "MIT",
   "type": "module",
   "main": "./lib/mt.js",
+  "bin": "./mt.js",
   "scripts": {
     "lint": "eslint .",
     "audit": "npm audit --omit=dev",
