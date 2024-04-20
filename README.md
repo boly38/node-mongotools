@@ -16,7 +16,7 @@ This readme contains some samples. Other samples are under [examples/](./example
 
 You may notice that `mongodump` and `mongorestore` binaries are part of [database-tools](https://www.mongodb.com/docs/database-tools/installation/installation/) (follow standard installation for common OS). These binaries are mandatory for node-mongotools nodejs project as we are talking here of "wrapper" : a more convenient way to launch command + arguments from NodeJS code).
 
-From a Github Actions context, you can install them via [action-mongo-tools](https://github.com/boly38/action-mongo-tools). There is an example in this project in [main workflow](.github/workflows/main.yml) that execute tests.
+From a GitHub Actions context, you can install them via [action-mongo-tools](https://github.com/boly38/action-mongo-tools). There is an example in this project in [main workflow](.github/workflows/main.yml) that execute tests.
 
 
 ## Command line usage
@@ -119,6 +119,9 @@ const mtOptions = {
         dropboxToken: process.env.MYAPP_DROPBOX_SECRET_TOKEN
       };
 ```
+
+This project is compatible with ES Module projects that rely on `import`.
+For now it's not compatible with CommonJS (`require`). But contribution are welcome.
 
 ### List dumps
 ```
