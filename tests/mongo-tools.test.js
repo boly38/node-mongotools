@@ -2,6 +2,20 @@ import MongoTools from "../lib/MongoTools.js";
 import MTOptions from "../lib/MTOptions.js";
 import {before, describe, it, expect} from './testLib.js';
 import fs from 'fs';
+import {countDocumentsInCollection, createDatabaseWithNDocs, dropDatabase} from "./tests-utils.js";
+
+/**
+ * TEST Requirements - Environment
+ * cp env/initEnv.template.sh env/initEnv.dontpush.sh
+ * edit env/initEnv.dontpush.sh
+ * source env/initEnv.dontpush.sh
+ * Note that testDbName is enforced to 'node-mongotools-test' to avoid conflict or remove of legacy data
+ * testDbName MUST be used by ALL tests that need db name.
+ * so don't mix your legacy data with testBackupDirectory and testDropboxBackupDirectory
+ */
+const testDbName = 'node-mongotools-test';// WARNING - don't change this to avoid incident.
+const testBackupDirectory = 'tests/backup';
+const testDropboxBackupDirectory = 'tests/dropbox';
 
 const testDbUsername = process.env.MT_MONGO_USER || null;
 const testDbPassword = process.env.MT_MONGO_PWD || null;
@@ -9,10 +23,7 @@ const testDbAuth = testDbUsername !== null && testDbPassword != null ? `${testDb
 const testDbAuthSuffix = testDbUsername !== null && testDbPassword != null ? '?authSource=admin' : '';
 const testPort = process.env.MT_MONGO_PORT || 27017;
 const testDbToken = process.env.MT_DROPBOX_TOKEN || null;
-
-const testBackupDirectory = 'tests/backup';
-const testDropboxBackupDirectory = 'tests/dropbox';
-const testDbName = 'myDbForTest';
+const testDbAppKey = process.env.MT_DROPBOX_APP_KEY || null;
 const testDbUri = `mongodb://${testDbAuth}127.0.0.1:${testPort}/${testDbName}${testDbAuthSuffix}`;
 
 let mt = null;
@@ -20,6 +31,8 @@ let mtOptions = null;
 let lastDumpFile = null;
 let nbBackupExpected = 0;
 
+const LOCAL_NB_DOC = 5;
+const DBX_NB_DOC = 3;
 function logOutput(result) {
     if (result.stdout) {
         console.info('stdout:', result.stdout);
@@ -40,8 +53,11 @@ function logSuccess(success) {
 
 describe("Mongo Tools", function () {
 
-    before(() => {
+    before(async () => {
         console.info("Mongo Tools :: before");
+        await dropDatabase(testDbUri, `local:${testPort} db:${testDbName}`);
+        await createDatabaseWithNDocs(testDbUri, `local:${testPort} db:${testDbName}`, LOCAL_NB_DOC);
+
         fs.rmSync(testBackupDirectory, {recursive: true, force: true});
         fs.mkdirSync(testBackupDirectory, {recursive: true})
         nbBackupExpected = 0;
@@ -52,6 +68,7 @@ describe("Mongo Tools", function () {
             path: testBackupDirectory,
             fileName: 'should_dump_db_locally.gz',
             dropboxToken: null,
+            dropboxAppKey: null,
             showCommand: true
         });
         // DEBUG // console.log("MTOptions", mtOptions);
@@ -93,7 +110,7 @@ describe("Mongo Tools", function () {
                 logSuccess(dumpResult);
                 dumpResult.fileName.should.not.be.eql(null);
                 dumpResult.fullFileName.should.not.be.eql(null);
-                dumpResult.fullFileName.should.startsWith('tests/backup/myDbForTest__2');
+                dumpResult.fullFileName.should.startsWith('tests/backup/node-mongotools-test__2');
                 lastDumpFile = dumpResult.fullFileName;
                 nbBackupExpected++;
                 done();
@@ -102,13 +119,22 @@ describe("Mongo Tools", function () {
     });
 
     it("should restore database", done => {
-        mtOptions.dumpFile = lastDumpFile;
-        mt.mongorestore(mtOptions)
-            .then(restoreResult => {
-                logSuccess(restoreResult);
-                restoreResult.dumpFile.should.be.eql(lastDumpFile);
-                restoreResult.status.should.be.eql(0);
-                done();
+        dropDatabase(testDbUri, `local:${testPort} db:${testDbName}`)
+            .then(() => {
+                mtOptions.dumpFile = lastDumpFile;
+                mt.mongorestore(mtOptions)
+                    .then(restoreResult => {
+                        logSuccess(restoreResult);
+                        restoreResult.dumpFile.should.be.eql(lastDumpFile);
+                        restoreResult.status.should.be.eql(0);
+                        countDocumentsInCollection(testDbUri)
+                            .then(docCount => {
+                                expect(docCount).to.be.eql(LOCAL_NB_DOC);
+                                done();
+                            })
+                            .catch(_expectNoError)
+                    })
+                    .catch(_expectNoError);
             })
             .catch(_expectNoError);
     });
@@ -182,13 +208,15 @@ describe("Mongo Tools", function () {
 
 });
 
-if (testDbToken !== null) {
+if (testDbToken !== null || testDbAppKey != null) {
     let nbDropBoxBackup = 0;
     let withDropboxMtTestOptions = null;
     describe("Mongo Tools with Dropbox", function () {
 
-        before(() => {
+        before(async () => {
             console.info("Mongo Tools  with Dropbox :: before");
+            await dropDatabase(testDbUri, `local:${testPort} db:${testDbName}`);
+            await createDatabaseWithNDocs(testDbUri, `local:${testPort} db:${testDbName}`, DBX_NB_DOC);
             withDropboxMtTestOptions = new MTOptions({
                 db: testDbName,
                 port: testPort,
@@ -227,13 +255,22 @@ if (testDbToken !== null) {
         });
 
         it("should restore database from dropbox", done => {
-            withDropboxMtTestOptions.dumpFile = "/" + lastDumpFile;
-            mt.mongorestore(withDropboxMtTestOptions)
-                .then(restoreResult => {
-                    logSuccess(restoreResult);
-                    restoreResult.dumpFile.should.be.eql(withDropboxMtTestOptions.dropboxLocalPath + '/' + withDropboxMtTestOptions.fileName);
-                    restoreResult.status.should.be.eql(0);
-                    done();
+            dropDatabase(testDbUri, `local:${testPort} db:${testDbName}`)
+                .then(() => {
+                    withDropboxMtTestOptions.dumpFile = "/" + lastDumpFile;
+                    mt.mongorestore(withDropboxMtTestOptions)
+                        .then(restoreResult => {
+                            logSuccess(restoreResult);
+                            restoreResult.dumpFile.should.be.eql(withDropboxMtTestOptions.dropboxLocalPath + '/' + withDropboxMtTestOptions.fileName);
+                            restoreResult.status.should.be.eql(0);
+                            countDocumentsInCollection(testDbUri)
+                                .then(docCount => {
+                                    expect(docCount).to.be.eql(DBX_NB_DOC);
+                                    done();
+                                })
+                                .catch(_expectNoError)
+                        })
+                        .catch(_expectNoError);
                 })
                 .catch(_expectNoError);
         });
