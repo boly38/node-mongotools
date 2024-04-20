@@ -26,7 +26,12 @@ You should decide to install it globally without getting source or by cloning re
 ```bash
 npm install -g node-mongotools@latest
 ```
-When using a global install `mt` command must be directly available (ie. you can replace `node mt` by `mt` in examples).
+When using a global install `node-mongotools` command must be directly available (ie. you can replace `node mt` by `node-mongotools` in examples).
+
+You could revert thins by using
+```bash
+npm uninstall -g node-mongotools
+```
 
 ### Install by getting source 
 ```bash
@@ -53,7 +58,7 @@ source your options
 # create a mongo dump
 node mt dump
 # or if you rely on a global install
-# mt dump
+# node-mongotools dump
 # apply the same logic for next examples 
 
 # create a encrypted mongo dump
