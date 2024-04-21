@@ -6,7 +6,10 @@
   "license": "MIT",
   "type": "module",
   "main": "./lib/mt.js",
-  "bin": "./bin/mt.js",
+  "bin": {
+    "node-mongotools": "./bin/mt.js",
+    "mt": "./bin/mt.js"
+  },
   "scripts": {
     "lint": "eslint .",
     "audit": "npm audit --omit=dev",
