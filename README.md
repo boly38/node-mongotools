@@ -341,4 +341,6 @@ npm run test
 
 ### Contributions
 
-![Alt](https://repobeats.axiom.co/api/embed/6406b5b306aa531758e7787bbffb71cda2c4e4c7.svg "Repobeats analytics image")
+![Repobeats](https://repobeats.axiom.co/api/embed/6406b5b306aa531758e7787bbffb71cda2c4e4c7.svg "Repobeats analytics image")
+
+<small>provided by [Repobeats](https://repobeats.axiom.co/)</small> 
