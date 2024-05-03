@@ -23,17 +23,21 @@ describe("MTWrapper unit tests", function () {
         const mtOptions = new MTOptions({
             db: testDbName,
             port: testFixedPort,
-            path: testBackupDirectory
+            path: testBackupDirectory,
+            username:"myUser",
+            password:"myPass"
         });
 
         const command = wrapper.commandConnectFromOptions(mtOptions, '--beginning');
 
-        command.should.be.eql("--beginning --host 127.0.0.1 --port 17017 --username root --password mypass --authenticationDatabase admin --db myDbForTest");
+        command.should.be.eql("--beginning --host 127.0.0.1 --port 17017 --username myUser --password myPass --authenticationDatabase admin --db myDbForTest");
     });
 
     it("should wrap dump commandConnectFromOptions uri ssl", async function () {
         const mtOptions = new MTOptions({
             uri: testDbUri,
+            username:"myUser",
+            password:"myPass",
             ssl: "1",
             sslCAFile: "/tmp/myCAfile",
             sslPEMKeyFile: "/tmp/pem/sslPEMKeyFile",
@@ -45,7 +49,7 @@ describe("MTWrapper unit tests", function () {
 
         const command = wrapper.commandConnectFromOptions(mtOptions, '--beginning');
 
-        command.should.be.eql("--beginning --uri mongodb://root:mypass@127.0.0.1:17017/myDbForTest?authSource=admin "
+        command.should.be.eql(`--beginning --uri ${testDbUri} `
             + "--ssl --sslCAFile /tmp/myCAfile --sslPEMKeyFile /tmp/pem/sslPEMKeyFile --sslPEMKeyPassword strongPassHere "
             + "--sslCRLFile /tmp/pem/sslCRLFile --sslFIPSMode --tlsInsecure");
     });
@@ -54,12 +58,14 @@ describe("MTWrapper unit tests", function () {
         const mtOptions = new MTOptions({
             db: testDbName,
             port: testFixedPort,
-            path: testBackupDirectory
+            path: testBackupDirectory,
+            username:"myUser",
+            password:"myPass",
         });
 
         const command = wrapper.commandConnectFromOptions(mtOptions, '--beginning', true);
 
-        command.should.be.eql("--beginning --host 127.0.0.1 --port 17017 --username root --password mypass --authenticationDatabase admin --nsInclude myDbForTest.*");
+        command.should.be.eql("--beginning --host 127.0.0.1 --port 17017 --username myUser --password myPass --authenticationDatabase admin --nsInclude myDbForTest.*");
     });
 
     it("should wrap restore commandConnectFromOptions db user basic source and target dbs", async function () {
@@ -68,12 +74,14 @@ describe("MTWrapper unit tests", function () {
             dbFrom: testSourceDbName,
             dbTo: testTargetDbName,
             port: testFixedPort,
-            path: testBackupDirectory
+            path: testBackupDirectory,
+            username:"myUser",
+            password:"myPass",
         });
 
         const command = wrapper.commandConnectFromOptions(mtOptions, '--beginning', true);
 
-        command.should.be.eql("--beginning --host 127.0.0.1 --port 17017 --username root --password mypass --authenticationDatabase admin --nsFrom mySourceDbForTest.* --nsTo myTargetDbForTest.*");
+        command.should.be.eql("--beginning --host 127.0.0.1 --port 17017 --username myUser --password myPass --authenticationDatabase admin --nsFrom mySourceDbForTest.* --nsTo myTargetDbForTest.*");
     });
 
     it("should wrap restore commandConnectFromOptions uri ssl", async function () {
@@ -91,7 +99,7 @@ describe("MTWrapper unit tests", function () {
         const command = wrapper.commandConnectFromOptions(mtOptions, '--beginning', true);
 
         command.should.be.eql(
-            "--beginning --uri mongodb://root:mypass@127.0.0.1:17017/myDbForTest?authSource=admin "
+            `--beginning --uri ${testDbUri} `
             + "--ssl --sslCAFile /tmp/myCAFile --sslPEMKeyFile /tmp/pem/sslPEMKeyFile --sslPEMKeyPassword strongPassHere "
             + "--sslCRLFile /tmp/pem/sslCRLFile --sslFIPSMode --tlsInsecure");
     });
