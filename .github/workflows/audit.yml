@@ -14,32 +14,35 @@ jobs:
     strategy:
       matrix:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        node-version: [16.x]
+        node-version: [ 18.x ]
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          # version from package.json
+          run_install: false
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-          cache-dependency-path: |
-            package-lock.json
+          cache: 'pnpm'
 
       - name: Install dependencies
         # - run: npm ci # need package.json.lock
         run: |
           echo "install"
-          npm install
+          pnpm install
           echo "show outdated (if any)"
-          npm outdated --depth=3 || echo "you must think about update your dependencies :)"
+          pnpm outdated --depth=3 || echo "you must think about update your dependencies :)"
 
-      - name: Npm audit
-        uses: oke-py/npm-audit-action@v2
+      - name: pnpm audit & comment on PR
+        uses: JamesRobertWiseman/pnpm-audit@v1.0.6
         with:
-          audit_level: moderate
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          dedupe_issues: true
-          production_flag: true
+          level: moderate
+          fails: true

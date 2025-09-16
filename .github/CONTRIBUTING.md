@@ -13,12 +13,12 @@ If you want to push some code :
 You could also be critic with existing ticket/PR : all constructive feedbacks are welcome.
 
 ## test
-* launch tests using `npm test`. 
+* launch tests using `pnpm test`. 
 
 Think about environment setup.
 
 ## linter
-*  launch lint using `npm run lint`.
+*  launch lint using `pnpm run lint`.
 
 About linter :
  - locally ESLint 9.0 is used as dev dependencies and rely on `eslint.config.js` ([doc](https://eslint.org/docs/latest/use/configure/configuration-files))
@@ -36,7 +36,7 @@ this will make a new version and on version tag, the main ci workflow will push 
 # provide PAT with permissions to create release on current repository
 export GREN_GITHUB_TOKEN=your_token_here
 # one time setup
-npm install github-release-notes -g
+pnpm install github-release-notes -g
 
 git fetch --all && git pull
 # make a release vX with all history
