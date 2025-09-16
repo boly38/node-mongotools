@@ -76,6 +76,7 @@ jobs:
           lcov-file: ./coverage/lcov.info
 
       - name: pnpm audit & comment on PR
+        if: ${{ github.event_name == 'pull_request' }}
         uses: JamesRobertWiseman/pnpm-audit@v1.0.6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
