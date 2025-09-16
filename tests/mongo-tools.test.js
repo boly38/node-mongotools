@@ -15,6 +15,7 @@ import {countDocumentsInCollection, createDatabaseWithNDocs, dropDatabase} from 
  */
 const testDbName = 'node-mongotools-test';// WARNING - don't change this to avoid incident.
 const testBackupDirectory = 'tests/backup';
+const testBackupSubDirectory = 'tests/backup/subdirectory';
 const testDropboxBackupDirectory = 'tests/dropbox';
 
 const testDbUsername = process.env.MT_MONGO_USER || null;
@@ -33,6 +34,7 @@ let nbBackupExpected = 0;
 
 const LOCAL_NB_DOC = 5;
 const DBX_NB_DOC = 3;
+
 function logOutput(result) {
     if (result.stdout) {
         console.info('stdout:', result.stdout);
@@ -149,6 +151,35 @@ describe("Mongo Tools", function () {
                 done();
             })
             .catch(_expectNoError);
+    });
+
+    it("should list backup from unexisting dir", done => {
+        // given removed target subDirectory
+        if (fs.existsSync(testBackupSubDirectory)) {
+            fs.rmdirSync(testBackupSubDirectory, {recursive: true});
+        }
+
+        mt = new MongoTools();
+        mtOptions = new MTOptions({
+            db: testDbName,
+            port: testPort,
+            path: testBackupSubDirectory,// given path doesn't exist
+            fileName: 'should_dump_db_locally.gz',
+            dropboxToken: null,
+            dropboxAppKey: null,
+            showCommand: true
+        });
+
+        mt.list(mtOptions)
+            .then(listResult => {
+                logSuccess(listResult);
+                expect(listResult.filesystem).to.be.empty;
+                expect(listResult.path).to.be.eql(testBackupSubDirectory);
+                done();
+            })
+            .catch(_expectNoError);
+
+        fs.rmdirSync(testBackupSubDirectory, {recursive: true});
     });
 
     it("should dry rotate backups", done => {
