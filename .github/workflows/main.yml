@@ -21,63 +21,70 @@ jobs:
     strategy:
       matrix:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        node-version: [16.x]
+        node-version: [ 18.x ]
 
     services:
       mongodb:
-        image: mongo:4.2.11
+        image: mongo:5
         ports:
           - 27017:27017
 
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v5
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          # version from package.json
+          run_install: false
 
-    - name: Install dependencies
-      # npx force-resolutions : in case of Permission denied: run it locally to fix package-lock.json
-      run: |
-        echo "install"
-        npm run preinstall
-        npm install
-        echo "show outdated (if any)"
-        npm outdated --depth=3 || echo "you must think about update your dependencies :)"
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
-    - name: Setup mongo tools # add mongosh and mongodump/mongorestore
-      uses: boly38/action-mongo-tools@stable
+      - name: Install dependencies
+        # npx force-resolutions : in case of Permission denied: run it locally to fix package-lock.json
+        run: |
+          echo "install"
+          pnpm run preinstall
+          pnpm install
+          echo "show outdated (if any)"
+          pnpm outdated --depth=3 || echo "you must think about update your dependencies :)"
 
-    - name: Setup mongo user
-      # doc: https://docs.mongodb.com/manual/reference/built-in-roles/ "Backup and Restoration Roles"
-      # doc: https://docs.mongodb.com/manual/reference/method/db.createUser/
-      run: mongosh admin --eval 'db.createUser({user:"root",pwd:"mypass",roles:[{"role":"readWrite","db":"myDbForTest"}, "restore"]});'
+      - name: Setup mongo tools # add mongosh and mongodump/mongorestore
+        uses: boly38/action-mongo-tools@stable
 
-    - name: Run tests
-      env:
-        MT_MONGO_USER: root
-        MT_MONGO_PWD: mypass
-      run: npm run ci-test
+      - name: Setup mongo user
+        # doc: https://docs.mongodb.com/manual/reference/built-in-roles/ "Backup and Restoration Roles"
+        # doc: https://docs.mongodb.com/manual/reference/method/db.createUser/
+        run: mongosh admin --eval 'db.createUser({user:"root",pwd:"mypass",roles:[{"role":"readWrite","db":"myDbForTest"}, "restore"]});'
 
-    - name: Report coverage
-      continue-on-error: true
-      uses: romeovs/lcov-reporter-action@v0.2.16
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        lcov-file: ./coverage/lcov.info
+      - name: Run tests
+        env:
+          MT_MONGO_USER: root
+          MT_MONGO_PWD: mypass
+        run: pnpm run ci-test
 
-    - name: Npm audit
-      uses: oke-py/npm-audit-action@v2
-      with:
-        audit_level: moderate
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        dedupe_issues: true
-        production_flag: true
+      - name: Report coverage
+        continue-on-error: true
+        uses: romeovs/lcov-reporter-action@v0.3.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: ./coverage/lcov.info
 
-    - name: Publish NpmJS package
-      if: github.ref == 'refs/heads/npmjs'
-      run: |
-        echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_DEPLOY_TOKEN }}" > .npmrc
-        npm whoami # rely on .npmrc
-        npm publish
+      - name: pnpm audit & comment on PR
+        uses: JamesRobertWiseman/pnpm-audit@v1.0.6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          level: moderate
+          fails: true
+
+      - name: Publish NpmJS package
+        if: github.ref == 'refs/heads/npmjs'
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_DEPLOY_TOKEN }}" > .npmrc
+          npm whoami # rely on .npmrc
+          npm publish

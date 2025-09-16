@@ -1,8 +1,8 @@
 import {before, describe, it} from "mocha";
-import chai, {should, expect} from 'chai';
+import {expect, should, use} from 'chai';
 import chaiString from "chai-string";
 
-chai.should();
-chai.use(chaiString);
+use(chaiString);
+should();
 
-export {before, describe, it, chai, should,expect};
+export {before, describe, it, should, expect};

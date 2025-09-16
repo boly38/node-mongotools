@@ -24,20 +24,20 @@ You should decide to install it globally without getting source or by cloning re
 
 ### Install globally (beta)
 ```bash
-npm install -g node-mongotools@latest
+pnpm install -g node-mongotools@latest
 ```
 When using a global install `node-mongotools` command must be directly available (ie. you can replace `node mt` by `node-mongotools` in examples).
 
 You could revert thins by using
 ```bash
-npm uninstall -g node-mongotools
+pnpm uninstall -g node-mongotools
 ```
 
 ### Install by getting source 
 ```bash
 git clone https://github.com/boly38/node-mongotools.git
 # install dependencies
-npm install
+pnpm install
 ```
 
 ### Environment setup - first time only
@@ -121,7 +121,7 @@ node mt rotation
 
 You have to import as dependency
 ```
-npm install node-mongotools
+pnpm install node-mongotools
 ```
 
 ### Define the requirements, example:
@@ -326,8 +326,8 @@ You're not a dev ? just submit an issue (bug, improvements, questions). Or else:
 * Then mocha tests
 ```
 git clone https://github.com/boly38/node-mongotools.git
-npm install
-npm run test
+pnpm install
+pnpm run test
 ```
 * you could also fork, feature branch, then submit a pull request.
 
