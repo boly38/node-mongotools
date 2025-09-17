@@ -40,9 +40,7 @@ jobs:
           echo "show outdated (if any)"
           pnpm outdated --depth=3 || echo "you must think about update your dependencies :)"
 
-      - name: pnpm audit & comment on PR
-        uses: JamesRobertWiseman/pnpm-audit@v1.0.6
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          level: moderate
-          fails: true
+      - name: pnpm audit
+        run: |
+          echo "pnpm audit"
+          pnpm audit
