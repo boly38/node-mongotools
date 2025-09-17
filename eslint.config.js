@@ -2,10 +2,11 @@
 import js from "@eslint/js";
 import globals from "globals";
 import mochaPlugin from 'eslint-plugin-mocha'; // https://www.npmjs.com/package/eslint-plugin-mocha
-import stylisticJs from '@stylistic/eslint-plugin-js'
+import stylisticJs from '@stylistic/eslint-plugin'
+
 export default [
     js.configs.recommended, // Recommended config applied to all files
-    mochaPlugin.configs.flat.recommended, // or `mochaPlugin.configs.flat.all` to enable all
+    mochaPlugin.configs.recommended, // or `mochaPlugin.configs.all` to enable all
     {
         "files": ["lib/**/*.js", "examples/**/*.js", "tests/**/*.js"],
         "languageOptions": {
