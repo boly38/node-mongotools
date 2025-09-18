@@ -319,6 +319,11 @@ Example details: if there is a backup that is more than 3 days old, keep 2 newer
 Dropbox limits:
 - rotation feature will not apply if dropbox backup target directory content contains more than 2000 files.
 
+## Immutable releases
+
+For security reason, since [#102](https://github.com/boly38/node-mongotools/issues/102) and `v2.2.9`, this repository rely on [immutable releases](https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/immutable-releases).
+
+
 ## How to contribute
 You're not a dev ? just submit an issue (bug, improvements, questions). Or else:
 * Clone

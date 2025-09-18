@@ -25,22 +25,23 @@ About linter :
  - on GitHub PR, [HoundCi service](https://houndci.com) is triggered and rely on [`.hound.yml`](../.hound.yml) file and derived file. HoundCi is yet not compatible with 9.0 config file ([src](http://help.houndci.com/en/articles/2461415-supported-linters) - [eslint 8.0 config file doc](https://eslint.org/docs/v8.x/use/configure/configuration-files).
 
 # Maintainer HowTos
+
 ## HowTo create a fresh version
 - use patch or minor or major workflow
 
 this will make a new version and on version tag, the main ci workflow will push a new npmjs version too.
 
-## HowTo release using Gren
+## HowTo release using `gh`
 
+Install and create automatically a draft release version using [gh client](https://cli.github.com/)
+- the version tag must exists
+
+Example to create v2.2.9
 ```bash
-# provide PAT with permissions to create release on current repository
-export GREN_GITHUB_TOKEN=your_token_here
-# one time setup
-pnpm install github-release-notes -g
+gh release create v2.2.9 --draft --generate-notes
+```
+this will make a new draft release. Verify it in [releases list](https://github.com/boly38/node-mongotools/releases)
 
-git fetch --all && git pull
-# make a release vX with all history
-gren release --data-source=prs -t v2.2.2 --milestone-match=v2.2.2
-# overrides release vX with history from vX-1
-gren release --data-source=prs -t "v2.2.2..v2.2.1" --milestone-match="v2.2.2" --override
+- ⚠️ the repository apply immutable releases since #102, so you can't modify a release once published
+- publish the release when ready
 ```
