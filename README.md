@@ -328,12 +328,7 @@ For security reason, since [#102](https://github.com/boly38/node-mongotools/issu
 You're not a dev ? just submit an issue (bug, improvements, questions). Or else:
 * Clone
 * Install deps
-* Then mocha tests
-```
-git clone https://github.com/boly38/node-mongotools.git
-pnpm install
-pnpm run test
-```
+* Then mocha tests (cf. [README](./tests/README.md))
 * you could also fork, feature branch, then submit a pull request.
 
 ### Services or activated bots

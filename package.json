@@ -13,7 +13,6 @@
   "scripts": {
     "lint": "eslint .",
     "audit": "npm audit --omit=dev",
-    "preinstall": "npx force-resolutions",
     "test-requirement": "echo You must do: source ./env/initEnv.test.sh",
     "test": "echo test&& mocha --bail --unhandled-rejections=strict tests/*.test.js --timeout 50000",
     "test21": "echo beta test with nodejs 21&& node --test --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=lcov.info --test tests",
@@ -39,12 +38,7 @@
   ],
   "copyright": {
     "title": "node-mongotools",
-    "years": [
-      2020,
-      2021,
-      2022,
-      2023
-    ],
+    "years": [2020,2021,2022,2023,2024,2025],
     "author": "Brice Vandeputte"
   },
   "dependencies": {
@@ -55,7 +49,7 @@
   "devDependencies": {
     "@eslint/js": "^9.35.0",
     "@stylistic/eslint-plugin": "^5.3.1",
-    "@types/node": "^24.5.1",
+    "@types/node": "^24.5.2",
     "chai": "^6.0.1",
     "chai-string": "^1.6.0",
     "eslint": "^9.35.0",
@@ -66,13 +60,19 @@
     "json5": "^2.2.3",
     "mocha": "^11.7.2",
     "mongoose": "^8.18.1",
-    "npm-force-resolutions": "^0.0.10",
     "nyc": "^17.1.0"
   },
   "pnpm": {
     "overrides": {
-      "form-data": "^4.0.4"
+      "form-data": "^4.0.4",
+      "chai-string>chai": "^6.0.1",
+      "glob": "^9.3.5",
+      "rimraf": "^3.0.2"
     }
+  },
+  "doc": {
+    "npm-force-resolutions": "needed by GHA",
+    "rimraf": "need to move from nyc to c8"
   },
   "jshintConfig": {
     "esversion": 6
