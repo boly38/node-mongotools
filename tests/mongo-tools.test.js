@@ -53,7 +53,7 @@ function logSuccess(success) {
     console.info(`OK ${JSON.stringify(success, null, 4)}`);
 }
 
-describe("Mongo Tools", function () {
+describe("🧪🧩 Mongo Tools", function () {
 
     before(async () => {
         console.info("Mongo Tools :: before");
@@ -76,7 +76,23 @@ describe("Mongo Tools", function () {
         // DEBUG // console.log("MTOptions", mtOptions);
     });
 
-    it("should not dump with invalid parameter", done => {
+    it("🧪 should list backups for an unknown directory return []", done => {
+        mt.list(new MTOptions({
+            uri: testDbUri,
+            path: testBackupSubDirectory,
+            dropboxToken: null,
+            showCommand: true
+        }))
+            .then(listResult => {
+                logSuccess(listResult);
+                expect(listResult.filesystem).to.be.empty;
+                expect(listResult.path).to.be.eql(testBackupSubDirectory);
+                done();
+            })
+            .catch(_expectNoError);
+    });
+
+    it("🧪 should not dump with invalid parameter", done => {
         mtOptions.numParallelCollections = "Error because I'm not an integer ^^";
         mt.mongodump(mtOptions)
             .then(result => expect.fail("expect error but got", result))
@@ -88,7 +104,7 @@ describe("Mongo Tools", function () {
 
     });
 
-    it("should dump database locally", done => {
+    it("🧪 should dump database locally", done => {
         mt.mongodump(mtOptions)
             .then(dumpResult => {
                 logSuccess(dumpResult);
@@ -101,7 +117,7 @@ describe("Mongo Tools", function () {
             .catch(_expectNoError);
     });
 
-    it("should dump database from uri", done => {
+    it("🧪 should dump database from uri", done => {
         mt.mongodump(new MTOptions({
             uri: testDbUri,
             path: testBackupDirectory,
@@ -120,7 +136,7 @@ describe("Mongo Tools", function () {
             .catch(_expectNoError);
     });
 
-    it("should restore database", done => {
+    it("🧪 should restore database", done => {
         dropDatabase(testDbUri, `local:${testPort} db:${testDbName}`)
             .then(() => {
                 mtOptions.dumpFile = lastDumpFile;
@@ -141,19 +157,20 @@ describe("Mongo Tools", function () {
             .catch(_expectNoError);
     });
 
-    it("should list backup", done => {
+    it("🧪 should list backups", done => {
         mt.list(mtOptions)
             .then(listResult => {
                 logSuccess(listResult);
-                expect(listResult.filesystem).to.have.lengthOf(nbBackupExpected);
+                expect(listResult.filesystem).to.have.lengthOf(nbBackupExpected + 1);
                 expect(listResult.filesystem).to.include(lastDumpFile)
+                expect(listResult.filesystem).to.include(testBackupSubDirectory)
                 listResult.path.should.be.eql(testBackupDirectory);
                 done();
             })
             .catch(_expectNoError);
     });
 
-    it("should list backup from unexisting dir", done => {
+    it("🧪 should list backups from unexisting dir", done => {
         // given removed target subDirectory
         if (fs.existsSync(testBackupSubDirectory)) {
             fs.rmdirSync(testBackupSubDirectory, {recursive: true});
@@ -182,7 +199,7 @@ describe("Mongo Tools", function () {
         fs.rmdirSync(testBackupSubDirectory, {recursive: true});
     });
 
-    it("should dry rotate backups", done => {
+    it("🧪 should dry rotate backups", done => {
         mt.rotation({
             path: testBackupDirectory,
             dropboxToken: null,
@@ -200,7 +217,7 @@ describe("Mongo Tools", function () {
             .catch(_expectNoError);
     });
 
-    it("should rotate backups", done => {
+    it("🧪 should rotate backups", done => {
         mt.rotation({
             path: testBackupDirectory,
             dropboxToken: null,
@@ -219,7 +236,7 @@ describe("Mongo Tools", function () {
 
     });
 
-    it("should rotate no backups", done => {
+    it("🧪 should rotate no backups", done => {
         mt.rotation({
             path: testBackupDirectory,
             dropboxToken: null,
@@ -242,7 +259,7 @@ describe("Mongo Tools", function () {
 if (testDbToken !== null || testDbAppKey != null) {
     let nbDropBoxBackup = 0;
     let withDropboxMtTestOptions = null;
-    describe("Mongo Tools with Dropbox", function () {
+    describe("🧪🧩 Mongo Tools with Dropbox", function () {
 
         before(async () => {
             console.info("Mongo Tools  with Dropbox :: before");
@@ -258,7 +275,9 @@ if (testDbToken !== null || testDbAppKey != null) {
             });
         })
 
-        it("should dump database on dropbox", done => {
+        // ℹ️ for now there is no remote cleanup so no way to test list of unexisting remote backup dir
+
+        it("🧪 should dump database on dropbox", done => {
             mt.mongodump(withDropboxMtTestOptions)
                 .then(dumpResult => {
                     logSuccess(dumpResult);
@@ -271,7 +290,7 @@ if (testDbToken !== null || testDbAppKey != null) {
                 .catch(_expectNoError);
         });
 
-        it("should list include dropbox backup", done => {
+        it("🧪 should list include dropbox backups", done => {
             mt.list(withDropboxMtTestOptions)
                 .then(listResult => {
                     logSuccess(listResult);
@@ -285,7 +304,7 @@ if (testDbToken !== null || testDbAppKey != null) {
                 .catch(_expectNoError);
         });
 
-        it("should restore database from dropbox", done => {
+        it("🧪 should restore database from dropbox", done => {
             dropDatabase(testDbUri, `local:${testPort} db:${testDbName}`)
                 .then(() => {
                     withDropboxMtTestOptions.dumpFile = "/" + lastDumpFile;
@@ -306,7 +325,7 @@ if (testDbToken !== null || testDbAppKey != null) {
                 .catch(_expectNoError);
         });
 
-        it("should rotation remove dropbox backup too", done => {
+        it("🧪 should rotation remove dropbox backup too", done => {
             mt.rotation({
                 path: testBackupDirectory,
                 rotationWindowsDays: 0,

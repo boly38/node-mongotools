@@ -49,7 +49,6 @@ jobs:
         # npx force-resolutions : in case of Permission denied: run it locally to fix package-lock.json
         run: |
           echo "install"
-          pnpm run preinstall
           pnpm install
           echo "show outdated (if any)"
           pnpm outdated --depth=3 || echo "you must think about update your dependencies :)"

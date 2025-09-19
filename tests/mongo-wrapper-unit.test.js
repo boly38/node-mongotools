@@ -17,9 +17,9 @@ const testDbUri = `mongodb://${testDbAuth}127.0.0.1:${testFixedPort}/${testDbNam
 
 const wrapper = new MTWrapper();
 
-describe("MTWrapper unit tests", function () {
+describe("🧪🧩 MTWrapper unit tests", function () {
 
-    it("should wrap dump commandConnectFromOptions db user basic", async function () {
+    it("🧪 should wrap dump commandConnectFromOptions db user basic", async function () {
         const mtOptions = new MTOptions({
             db: testDbName,
             port: testFixedPort,
@@ -33,7 +33,7 @@ describe("MTWrapper unit tests", function () {
         command.should.be.eql("--beginning --host 127.0.0.1 --port 17017 --username myUser --password myPass --authenticationDatabase admin --db myDbForTest");
     });
 
-    it("should wrap dump commandConnectFromOptions uri ssl", async function () {
+    it("🧪 should wrap dump commandConnectFromOptions uri ssl", async function () {
         const mtOptions = new MTOptions({
             uri: testDbUri,
             username:"myUser",
@@ -54,7 +54,7 @@ describe("MTWrapper unit tests", function () {
             + "--sslCRLFile /tmp/pem/sslCRLFile --sslFIPSMode --tlsInsecure");
     });
 
-    it("should wrap restore commandConnectFromOptions db user basic", async function () {
+    it("🧪 should wrap restore commandConnectFromOptions db user basic", async function () {
         const mtOptions = new MTOptions({
             db: testDbName,
             port: testFixedPort,
@@ -68,7 +68,7 @@ describe("MTWrapper unit tests", function () {
         command.should.be.eql("--beginning --host 127.0.0.1 --port 17017 --username myUser --password myPass --authenticationDatabase admin --nsInclude myDbForTest.*");
     });
 
-    it("should wrap restore commandConnectFromOptions db user basic source and target dbs", async function () {
+    it("🧪 should wrap restore commandConnectFromOptions db user basic source and target dbs", async function () {
         const mtOptions = new MTOptions({
             db: null,
             dbFrom: testSourceDbName,
@@ -84,7 +84,7 @@ describe("MTWrapper unit tests", function () {
         command.should.be.eql("--beginning --host 127.0.0.1 --port 17017 --username myUser --password myPass --authenticationDatabase admin --nsFrom mySourceDbForTest.* --nsTo myTargetDbForTest.*");
     });
 
-    it("should wrap restore commandConnectFromOptions uri ssl", async function () {
+    it("🧪 should wrap restore commandConnectFromOptions uri ssl", async function () {
         const mtOptions = new MTOptions({
             uri: testDbUri,
             ssl: "1",
