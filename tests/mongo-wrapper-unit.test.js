@@ -81,7 +81,10 @@ describe("🧪🧩 MTWrapper unit tests", function () {
 
         const command = wrapper.commandConnectFromOptions(mtOptions, '--beginning', true);
 
-        command.should.be.eql("--beginning --host 127.0.0.1 --port 17017 --username myUser --password myPass --authenticationDatabase admin --nsFrom mySourceDbForTest.* --nsTo myTargetDbForTest.*");
+        command.should.be.eql("--beginning --host 127.0.0.1 --port 17017 --username myUser --password myPass " +
+            "--authenticationDatabase admin " +
+            "--nsFrom mySourceDbForTest.* --nsTo myTargetDbForTest.* " +
+            "--nsInclude mySourceDbForTest.*");
     });
 
     it("🧪 should wrap restore commandConnectFromOptions uri ssl", async function () {
