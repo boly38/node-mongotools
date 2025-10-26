@@ -51,7 +51,7 @@ jobs:
           echo "install"
           pnpm install
           echo "show outdated (if any)"
-          pnpm outdated --depth=3 || echo "you must think about update your dependencies :)"
+          pnpm outdated --depth=3 || echo "::notice title=OneLineReport::ℹ️ you must think about update your dependencies :)"
 
       - name: Setup mongo tools # add mongosh and mongodump/mongorestore
         uses: boly38/action-mongo-tools@stable
@@ -65,14 +65,19 @@ jobs:
         env:
           MT_MONGO_USER: root
           MT_MONGO_PWD: mypass
-        run: pnpm run ci-test
+        run: |
+          echo ::group::Run ci-tests
+          pnpm ci-test
+          echo ::endgroup::
 
       - name: Report coverage
         continue-on-error: true
-        uses: romeovs/lcov-reporter-action@v0.3.1
+        # uses: romeovs/lcov-reporter-action@v0.3.1
+        uses: andybelltree/lcov-reporter-action@v1.7.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: ./coverage/lcov.info
+          filter-changed-files: true
 
       - name: pnpm audit & comment on PR
         if: ${{ github.event_name == 'pull_request' }}
