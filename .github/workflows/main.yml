@@ -70,7 +70,8 @@ jobs:
           pnpm ci-test
           echo ::endgroup::
 
-      - name: Report coverage
+      - name: COVERAGE - Report coverage on pull request
+        if: github.event_name == 'pull_request'
         continue-on-error: true
         # uses: romeovs/lcov-reporter-action@v0.3.1
         uses: andybelltree/lcov-reporter-action@v1.7.0
