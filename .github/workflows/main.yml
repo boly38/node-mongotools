@@ -1,5 +1,5 @@
 # mongotools continuous integration
-name: mongotools-ci
+name: main
 
 # Controls when the action will run. 
 on:
