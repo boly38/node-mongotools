@@ -54,20 +54,20 @@
     "dropbox-refresh-token": "^0.0.5"
   },
   "devDependencies": {
-    "@eslint/js": "^9.35.0",
-    "@stylistic/eslint-plugin": "^5.3.1",
-    "@types/node": "^24.5.2",
+    "@eslint/js": "^9.38.0",
+    "@stylistic/eslint-plugin": "^5.5.0",
+    "@types/node": "^24.9.1",
     "c8": "^10.1.3",
-    "chai": "^6.0.1",
+    "chai": "^6.2.0",
     "chai-string": "^1.6.0",
-    "eslint": "^9.35.0",
-    "eslint-plugin-eslint-plugin": "^7.0.0",
-    "eslint-plugin-mocha": "^11.1.0",
+    "eslint": "^9.38.0",
+    "eslint-plugin-eslint-plugin": "^7.2.0",
+    "eslint-plugin-mocha": "^11.2.0",
     "eslint-plugin-node": "^11.1.0",
     "globals": "^16.4.0",
     "json5": "^2.2.3",
-    "mocha": "^11.7.2",
-    "mongoose": "^8.18.1"
+    "mocha": "^11.7.4",
+    "mongoose": "^8.19.2"
   },
   "pnpm": {
     "overrides": {
