@@ -1,4 +1,4 @@
-name: mongotools-audit
+name: audit
 
 on:
   schedule:
@@ -38,7 +38,7 @@ jobs:
           echo "install"
           pnpm install
           echo "show outdated (if any)"
-          pnpm outdated --depth=3 || echo "you must think about update your dependencies :)"
+          pnpm outdated --depth=3 || echo "::notice title=OneLineReport::ℹ️ you must think about update your dependencies :)"
 
       - name: pnpm audit
         run: |
