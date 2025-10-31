@@ -33,12 +33,13 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        # - run: npm ci # need package.json.lock
         run: |
+          echo ::group::Install dependencies
           echo "install"
           pnpm install
           echo "show outdated (if any)"
-          pnpm outdated --depth=3 || echo "::notice title=OneLineReport::ℹ️ you must think about update your dependencies :)"
+          pnpm outdated --depth=3 || echo "::warning::🕸️ you must think about update your dependencies :)"
+          echo ::endgroup::
 
       - name: pnpm audit
         run: |
