@@ -34,7 +34,7 @@ this will make a new version and on version tag, the main ci workflow will push 
 ## HowTo release using `gh`
 
 Install and create automatically a draft release version using [gh client](https://cli.github.com/)
-- the version tag must exists
+- the version tag must exist
 
 Example to create v2.2.9
 ```bash

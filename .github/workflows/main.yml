@@ -46,11 +46,13 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        # npx force-resolutions : in case of Permission denied: run it locally to fix package-lock.json
         run: |
+          echo ::group::Install dependencies
           echo "install"
           pnpm install
           echo "show outdated (if any)"
+          pnpm outdated --depth=3 || echo "::warning::🕸️ you must think about update your dependencies :)"
+          echo ::endgroup::
           pnpm outdated --depth=3 || echo "::notice title=OneLineReport::ℹ️ you must think about update your dependencies :)"
 
       - name: Setup mongo tools # add mongosh and mongodump/mongorestore
