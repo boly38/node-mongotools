@@ -67,15 +67,7 @@
     "globals": "^16.4.0",
     "json5": "^2.2.3",
     "mocha": "^11.7.4",
-    "mongoose": "^8.19.2"
-  },
-  "pnpm": {
-    "overrides": {
-      "form-data": "^4.0.4",
-      "chai-string>chai": "^6.0.1",
-      "glob": "^9.3.5",
-      "rimraf": "^3.0.2"
-    }
+    "mongoose": "^8.24.5"
   },
   "doc": {
     "npm-force-resolutions": "needed by GHA",
