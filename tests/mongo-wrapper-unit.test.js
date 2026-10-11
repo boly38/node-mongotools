@@ -1,5 +1,5 @@
 import MTOptions from "../lib/MTOptions.js";
-import MTWrapper from "../lib/MTWrapper.js";
+import MTWrapper, {sanitizeCommand} from "../lib/MTWrapper.js";
 
 import {describe, it} from "node:test";
 
@@ -105,6 +105,18 @@ describe("🧪🧩 MTWrapper unit tests", function () {
             `--beginning --uri ${testDbUri} `
             + "--ssl --sslCAFile /tmp/myCAFile --sslPEMKeyFile /tmp/pem/sslPEMKeyFile --sslPEMKeyPassword strongPassHere "
             + "--sslCRLFile /tmp/pem/sslCRLFile --sslFIPSMode --tlsInsecure");
+    });
+
+    it("🧪 should sanitize credentials in MongoDB URIs", function () {
+        const command = ' --uri mongodb://user:password@example.com/database --gzip';
+
+        sanitizeCommand(command).should.be.eql(' --uri mongodb://user:********@example.com/database --gzip');
+    });
+
+    it("🧪 should sanitize authentication option values", function () {
+        const command = ' --username myUser --password myPass --sslPEMKeyPassword pemPass';
+
+        sanitizeCommand(command).should.be.eql(' --username myUser --password ******** --sslPEMKeyPassword ********');
     });
 
 });
