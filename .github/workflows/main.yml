@@ -90,9 +90,10 @@ jobs:
           level: moderate
           fails: true
 
-      - name: Publish NpmJS package
-        if: github.ref == 'refs/heads/npmjs'
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_DEPLOY_TOKEN }}" > .npmrc
-          npm whoami # rely on .npmrc
-          npm publish
+      # Publishing via 2FA must be done manually from the command line for now, until a better solution is available.
+      # - name: Publish NpmJS package
+      #   if: github.ref == 'refs/heads/npmjs'
+      #   run: |
+      #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_DEPLOY_TOKEN }}" > .npmrc
+      #     npm whoami # rely on .npmrc
+      #     npm publish
