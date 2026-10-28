@@ -15,3 +15,6 @@ tests/backup/
 
 #Files with secrets
 *.dontpush.*
+
+#Superpowers local plans and work notes
+docs/superpowers/

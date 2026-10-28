@@ -192,11 +192,10 @@ describe("🧪🧩 Mongo Tools", function () {
                 logSuccess(listResult);
                 expect(listResult.filesystem).to.be.empty;
                 expect(listResult.path).to.be.eql(testBackupSubDirectory);
+                fs.rmSync(testBackupSubDirectory, {recursive: true, force: true});
                 done();
             })
             .catch(_expectNoError);
-
-        fs.rmdirSync(testBackupSubDirectory, {recursive: true});
     });
 
     it("🧪 should dry rotate backups", done => {

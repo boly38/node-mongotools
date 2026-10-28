@@ -63,6 +63,9 @@ jobs:
         # doc: https://docs.mongodb.com/manual/reference/method/db.createUser/
         run: mongosh admin --eval 'db.createUser({user:"root",pwd:"mypass",roles:[{"role":"readWrite","db":"myDbForTest"}, "restore"]});'
 
+      - name: Run TypeScript consumer acceptance test
+        run: pnpm test:typescript
+
       - name: Run tests
         env:
           MT_MONGO_USER: root

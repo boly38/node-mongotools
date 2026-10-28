@@ -6,6 +6,7 @@
   "license": "MIT",
   "type": "module",
   "main": "./lib/mt.js",
+  "types": "./types/index.d.ts",
   "bin": {
     "node-mongotools": "./bin/mt.js",
     "mt": "./bin/mt.js"
@@ -15,6 +16,7 @@
     "audit": "npm audit --omit=dev",
     "test-requirement": "echo You must do: source ./env/initEnv.test.sh",
     "test": "echo test&& mocha --bail --unhandled-rejections=strict tests/*.test.js --timeout 50000",
+    "test:typescript": "node tests/typescript/run.mjs",
     "test21": "echo beta test with nodejs 21&& node --test --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=lcov.info --test tests",
     "ci-test": "echo linux ci-test&& c8 --reporter text --reporter cobertura --reporter html --reporter=lcov --lines 66 mocha --exit --unhandled-rejections=strict tests/*.test.js --timeout 50000"
   },
@@ -67,7 +69,8 @@
     "globals": "^16.4.0",
     "json5": "^2.2.3",
     "mocha": "^11.7.4",
-    "mongoose": "^8.24.5"
+    "mongoose": "^8.24.5",
+    "typescript": "^5.9.3"
   },
   "doc": {
     "npm-force-resolutions": "needed by GHA",
