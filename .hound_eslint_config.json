@@ -3,6 +3,9 @@
     "extends": [
         "eslint:recommended"
     ],
+    "ignorePatterns": [
+        "**/*.ts"
+    ],
     "env" : {
         "browser" : true,
         "node" : true,
