@@ -31,6 +31,7 @@ console.log(result.fullFileName);
 ```
 
 Type declarations are included in the npm package. No separate `@types` package is required.
+TypeScript support is currently in alpha; feedback from real-world use is welcome.
 
 ## Usage
 
