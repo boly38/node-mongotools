@@ -72,6 +72,9 @@ compatible with CommonJS `require`.
 `MTOptions` instance. See the [advanced configuration guide](./docs/configuration.md) for all options, environment
 variables, Dropbox setup, and rotation behavior.
 
+The library is implemented in JavaScript and includes TypeScript declarations, so no separate `@types` package is
+needed. TypeScript support is currently in alpha.
+
 ## Configuration (advanced)
 
 Options passed to a method take precedence over environment variables, which take precedence over defaults.
