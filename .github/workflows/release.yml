@@ -1,0 +1,104 @@
+# Create a patch, minor, or major release from main.
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Semantic version bump for the next release
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        default: patch
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Require main branch
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Run this workflow from the main branch."
+          exit 1
+
+      - name: Check out main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          token: ${{ secrets.GH_ACTIONS_TOKEN }}
+          fetch-depth: 0
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Set up Node.js 20.x
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20.x
+          cache: pnpm
+
+      - name: Check GitHub CLI
+        run: gh --version
+
+      - name: Bump version and update release refs
+        env:
+          BUMP: ${{ inputs.bump }}
+        run: |
+          case "$BUMP" in
+            patch|minor|major) ;;
+            *) echo "::error::Unsupported version bump: $BUMP"; exit 1 ;;
+          esac
+
+          git fetch --all --tags
+          git checkout main
+
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --global user.name 'github-actions[bot]'
+          NPMJS_REF=$(git rev-parse origin/npmjs)
+
+          if ! git merge-base --is-ancestor "$NPMJS_REF" origin/main; then
+            echo "::error::The npmjs mirror has diverged from main; reconcile it before releasing."
+            exit 1
+          fi
+
+          pnpm version "$BUMP"
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v$VERSION"
+
+          git push --atomic \
+            --force-with-lease="refs/heads/npmjs:$NPMJS_REF" \
+            origin main "HEAD:refs/heads/npmjs" "refs/tags/$TAG"
+
+      - name: Create draft release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_TOKEN }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v$VERSION"
+          echo "🔖 Creating draft release for $TAG"
+
+          if ! matching_release=$(gh release list --limit 1000 --json tagName \
+            --jq ".[] | select(.tagName == \"$TAG\") | .tagName"); then
+            echo "::error::Could not check for an existing release."
+            exit 1
+          fi
+
+          if [ -n "$matching_release" ]; then
+            echo "::warning::Release $TAG already exists; skipping draft creation."
+          else
+            gh release create "$TAG" --verify-tag --draft --generate-notes
+            echo "::notice::Draft release $TAG created."
+          fi
